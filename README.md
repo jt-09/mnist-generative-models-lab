@@ -193,6 +193,9 @@ VAE plus `LatentDiffusionMLP` in latent space (filename says "1d unet" but the m
 | [`docs/branch_pr_plan.md`](docs/branch_pr_plan.md) | 13-branch PR workflow |
 | [`docs/smoke_tests.md`](docs/smoke_tests.md) | Lightweight verification |
 | [`reports/report_plan.md`](reports/report_plan.md) | ~2000-word report outline |
+| [`reports/report.pdf`](reports/report.pdf) | Technical report (PDF) |
+| [`reports/report.md`](reports/report.md) | Technical report (Markdown) |
+| [`results/RESULTS_INDEX.md`](results/RESULTS_INDEX.md) | Collated figures and metrics from notebook outputs |
 
 ## Resume bullet
 

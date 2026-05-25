@@ -1,0 +1,6 @@
+model,metric,value,source
+"KNN (GPU, k=3)",test_accuracy,0.9705,notebooks/manual_knn.ipynb
+Logistic regression,test_accuracy,0.9241,notebooks/manual_logistic_reg.ipynb
+Manual MLP,test_accuracy,0.9794,notebooks/manual_mlp.ipynb
+SimpleCNN,test_accuracy,0.9871,notebooks/cnn.ipynb
+Comparison CNN,test_accuracy,0.9913,notebooks/02_mnist_models.ipynb

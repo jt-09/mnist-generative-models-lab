@@ -1,0 +1,112 @@
+figures:
+  # EDA
+  - dest: figures/01_eda/class_balance.png
+    notebook: notebooks/eda_analysis.ipynb
+    cell: 6
+    output: 1
+    role: Class balance bar chart (report section 2)
+
+  - dest: figures/01_eda/mean_digits.png
+    notebook: notebooks/eda_analysis.ipynb
+    cell: 12
+    output: 0
+    role: Mean image per digit
+
+  - dest: figures/01_eda/pca_overlap.png
+    notebook: notebooks/eda_analysis.ipynb
+    cell: 27
+    output: 1
+    role: PCA variance / 2D projection
+
+  # Manual KNN
+  - dest: figures/02_knn/k_sweep.png
+    notebook: notebooks/manual_knn.ipynb
+    cell: 2
+    output: 3
+    role: GPU k-sweep accuracy plot
+
+  # Logistic regression
+  - dest: figures/03_logistic/misclassified_grid.png
+    notebook: notebooks/manual_logistic_reg.ipynb
+    cell: 2
+    output: 1
+    role: Misclassified examples grid
+
+  # Manual MLP
+  - dest: figures/04_mlp/weight_templates.png
+    notebook: notebooks/manual_mlp.ipynb
+    cell: 1
+    output: 0
+    role: Loss curves, confusion matrix, weight templates
+
+  # CNN
+  - dest: figures/05_cnn/confusion_matrix.png
+    notebook: notebooks/cnn.ipynb
+    cell: 5
+    output: 1
+    role: Post-training analysis panel (confusion, ROC, metrics)
+
+  - dest: figures/05_cnn/roc_curves.png
+    notebook: notebooks/cnn.ipynb
+    cell: 5
+    output: 1
+    role: Same analysis panel (ROC subplots included)
+
+  - dest: figures/05_cnn/conv_filters.png
+    notebook: notebooks/cnn.ipynb
+    cell: 6
+    output: 1
+    role: First conv layer filters
+
+  # Comparison notebook
+  - dest: figures/06_comparison/cnn_confusion_pairs.png
+    notebook: notebooks/02_mnist_models.ipynb
+    cell: 24
+    output: 1
+    role: Top CNN confusion pairs with examples
+
+  # VAE
+  - dest: figures/07_vae/reconstructions.png
+    notebook: notebooks/vae.ipynb
+    cell: 4
+    output: 0
+    role: VAE reconstruction grid
+
+  - dest: figures/07_vae/training_curves.png
+    notebook: notebooks/vae.ipynb
+    cell: 4
+    output: 2
+    role: VAE training loss curves
+
+  # DDPM
+  - dest: figures/08_ddpm/denoising_grid.png
+    notebook: notebooks/ddpm.ipynb
+    cell: 18
+    output: 1
+    role: DDPM generated samples grid
+
+  # DCGAN
+  - dest: figures/09_dcgan/generated_digits.png
+    notebook: notebooks/dcgan.ipynb
+    cell: 6
+    output: 1
+    role: Final DCGAN sample grid and loss history
+
+  - dest: figures/09_dcgan/latent_interpolation.png
+    notebook: notebooks/dcgan.ipynb
+    cell: 7
+    output: 0
+    role: Latent space interpolation
+
+  # Latent diffusion
+  - dest: figures/10_latent_diff/vae_reconstructions.png
+    notebook: notebooks/vae + 1d unet (latent diff) (1).ipynb
+    cell: 7
+    output: 0
+    role: VAE reconstructions in latent-diff notebook
+
+  - dest: figures/10_latent_diff/diffusion_samples.png
+    notebook: notebooks/vae + 1d unet (latent diff) (1).ipynb
+    cell: 16
+    output: 1
+    role: Latent diffusion generated digits

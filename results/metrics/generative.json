@@ -1,0 +1,40 @@
+{
+  "metrics": [
+    {
+      "model": "VAE",
+      "metric": "train_loss",
+      "value": 100.22,
+      "source": "notebooks/vae.ipynb"
+    },
+    {
+      "model": "VAE",
+      "metric": "val_loss",
+      "value": 100.09,
+      "source": "notebooks/vae.ipynb"
+    },
+    {
+      "model": "DDPM",
+      "metric": "avg_loss_epoch_15",
+      "value": 0.0454,
+      "source": "notebooks/ddpm.ipynb"
+    },
+    {
+      "model": "DCGAN",
+      "metric": "generator_loss",
+      "value": 3.41,
+      "source": "notebooks/dcgan.ipynb"
+    },
+    {
+      "model": "DCGAN",
+      "metric": "discriminator_loss",
+      "value": 0.32,
+      "source": "notebooks/dcgan.ipynb"
+    },
+    {
+      "model": "Latent diffusion MLP",
+      "metric": "mse_epoch_150",
+      "value": 0.225,
+      "source": "notebooks/vae + 1d unet (latent diff) (1).ipynb"
+    }
+  ]
+}

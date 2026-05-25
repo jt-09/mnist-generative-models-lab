@@ -61,11 +61,11 @@ Deliverables: this outline now; `report.tex` and `report.pdf` later.
 
 ## TODOs before writing `report.tex`
 
-- [ ] Export key figures from notebook outputs to `docs/assets/` (optional)
-- [ ] Verify all metrics still match embedded outputs after any notebook edit
-- [ ] Decide whether to include GPU vs CPU KNN comparison in §3
-- [ ] Add bibliography entries for VAE, DDPM, DCGAN original papers
-- [ ] Pin dependency versions in `requirements.txt` and note in §7 reproducibility
+- [x] Export key figures from notebook outputs to `results/figures/` (see `results/RESULTS_INDEX.md`)
+- [x] Verify all metrics still match embedded outputs after any notebook edit
+- [x] Decide whether to include GPU vs CPU KNN comparison in §3 (GPU k-sweep used in report)
+- [x] Add bibliography entries for VAE, DDPM, DCGAN original papers (`reports/references.bib`)
+- [ ] Pin dependency versions in `requirements.txt` and note in §7 reproducibility (noted as limitation in report)
 
 ## Suggested narrative arc
 
