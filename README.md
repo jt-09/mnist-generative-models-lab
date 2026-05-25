@@ -2,13 +2,32 @@
 
 A notebook-driven learning lab on MNIST that progresses from scratch implementations (KNN, logistic regression, MLP) through EDA and CNN classification to generative models: VAE, pixel-space DDPM, DCGAN, and VAE + latent diffusion MLP. Ten interactive notebooks preserve embedded outputs so metrics and plots are visible without retraining.
 
+**Technical report:** [`reports/report.pdf`](reports/report.pdf) (PDF) | [`reports/report.md`](reports/report.md) (Markdown)  
+**Collated figures and metrics:** [`results/RESULTS_INDEX.md`](results/RESULTS_INDEX.md)
+
+## Introduction
+
+I built this repo as a hands-on curriculum, not a single benchmark script. The goal is to make each modeling step visible: explore MNIST, implement classical classifiers without frameworks, add a small CNN, benchmark models side by side, then walk through four generative families (VAE, DDPM, DCGAN, latent diffusion). Every notebook keeps saved cell outputs, so you can read the results without retraining. A reflective technical report documents what I learned, including awkward outcomes like logistic regression underperforming KNN and soft VAE reconstructions.
+
+## Project outline
+
+| Phase | Focus | Key notebooks | Outcome |
+|-------|--------|---------------|---------|
+| 1. Setup and EDA | Data intuition, class balance, PCA | `eda_analysis.ipynb` | Motivation for non-linear models |
+| 2. Manual classification | KNN, logistic regression, MLP from scratch | `manual_knn.ipynb`, `manual_logistic_reg.ipynb`, `manual_mlp.ipynb` | Accuracy ladder to **0.9794** (MLP) |
+| 3. Deep learning baseline | PyTorch CNN | `cnn.ipynb` | **0.9871** test accuracy |
+| 4. Benchmark | sklearn + PyTorch comparison harness | `02_mnist_models.ipynb` | CNN **0.9913**; confusion analysis |
+| 5. Generative models | VAE, pixel DDPM, DCGAN, latent diffusion MLP | `vae.ipynb`, `ddpm.ipynb`, `dcgan.ipynb`, latent-diff notebook | Qualitative digit samples in `results/figures/` |
+
+Two tracks run through the repo: **classification** (phases 1 to 4) and **generation** (phase 5). See the learning roadmap below for the recommended notebook order.
+
 ## Why this project
 
 MNIST is the canonical entry point for machine learning. This repo treats it as a full curriculum: understand data (EDA), build classifiers without frameworks (manual notebooks), add deep learning (CNN), benchmark everything side by side, then explore generation (VAE → diffusion → GAN → latent diffusion). Each step makes the math visible before adding abstractions.
 
 ## Dataset
 
-- **MNIST** — 60,000 train / 10,000 test, 28×28 grayscale, 10 digit classes
+- **MNIST** — 60,000 train / 10,000 test, 28x28 grayscale, 10 digit classes
 - Auto-downloaded via `tensorflow.keras.datasets.mnist` or `torchvision.datasets.MNIST`
 - No local image files committed
 
@@ -65,7 +84,7 @@ The manual models show a clean learning ladder: KNN does well with almost no tra
 | DCGAN | G loss / D loss | **3.41 / 0.32** | `dcgan.ipynb` |
 | Latent diffusion MLP | MSE (ep 150) | **0.224** | `vae + 1d unet (latent diff) (1).ipynb` |
 
-Visual samples (reconstructions, denoising grids, GAN outputs) live in notebook output cells. See [`docs/results.md`](docs/results.md) for the full metrics table.
+Visual samples (reconstructions, denoising grids, GAN outputs) are exported to [`results/figures/`](results/figures/) and embedded in notebook output cells. See [`docs/results.md`](docs/results.md) for the full metrics table and [`reports/report.pdf`](reports/report.pdf) for the write-up.
 
 ## How to run
 
@@ -84,27 +103,21 @@ mnist-generative-models-lab/
 ├── README.md
 ├── requirements.txt
 ├── .gitignore
-├── notebooks/
-│   ├── eda_analysis.ipynb
-│   ├── manual_knn.ipynb
-│   ├── manual_logistic_reg.ipynb
-│   ├── manual_mlp.ipynb
-│   ├── cnn.ipynb
-│   ├── 02_mnist_models.ipynb
-│   ├── vae.ipynb
-│   ├── ddpm.ipynb
-│   ├── dcgan.ipynb
-│   └── vae + 1d unet (latent diff) (1).ipynb
-├── docs/
-│   ├── learning_path.md
-│   ├── models.md
-│   ├── results.md
-│   ├── branch_pr_plan.md
-│   ├── dependency_integrity.md
-│   ├── review_checklist.md
-│   ├── smoke_tests.md
-│   └── git_workflow.md
+├── notebooks/          # 10 Jupyter notebooks (saved outputs)
+├── results/
+│   ├── RESULTS_INDEX.md
+│   ├── figures/        # Collated plots for report and portfolio
+│   ├── metrics/        # JSON/CSV metrics from notebook outputs
+│   └── tables/
+├── scripts/
+│   ├── extract_notebook_results.py
+│   └── results_manifest.yaml
+├── docs/               # Learning path, models, results, workflow
 └── reports/
+    ├── report.pdf      # Technical report (~2000 words)
+    ├── report.md
+    ├── report.tex
+    ├── references.bib
     └── report_plan.md
 ```
 
@@ -150,7 +163,7 @@ Pixel-space DDPM with T=300 timesteps and U-Net denoiser, 15 epochs.
 DCGAN generator/discriminator, 50 epochs, latent interpolation.
 
 ### `vae + 1d unet (latent diff) (1).ipynb`
-VAE plus `LatentDiffusionMLP` in latent space (filename says "1d unet" but the model is an MLP, not a U-Net). Trains VAE, extracts latents, runs 150-epoch diffusion. May contain a Colab drive-mount cell — guard for local use.
+VAE plus `LatentDiffusionMLP` in latent space (filename says "1d unet" but the model is an MLP, not a U-Net). Trains VAE, extracts latents, runs 150-epoch diffusion. The opening Colab `drive.mount` cell is guarded and skipped when running locally.
 
 ## Parameters that change the story
 
@@ -170,7 +183,7 @@ VAE plus `LatentDiffusionMLP` in latent space (filename says "1d unet" but the m
 
 ## Limitations
 
-- 28×28 grayscale only — not representative of real-world vision
+- 28x28 grayscale only; not representative of real-world vision
 - No FID or Inception Score for generative evaluation
 - Latent-diffusion notebook filename is misleading (`LatentDiffusionMLP`, not 1D U-Net)
 - VAE training duplicated between `vae.ipynb` and the latent-diff notebook
@@ -199,4 +212,4 @@ VAE plus `LatentDiffusionMLP` in latent space (filename says "1d unet" but the m
 
 ## Resume bullet
 
-Built an end-to-end MNIST ML lab—from scratch KNN, logistic regression, and MLP through CNN classification (99%+ accuracy) to generative models including VAE, DDPM, DCGAN, and latent diffusion—documented as an interactive Jupyter learning path.
+Built an end-to-end MNIST ML lab from scratch KNN, logistic regression, and MLP through CNN classification (99%+ accuracy) to generative models including VAE, DDPM, DCGAN, and latent diffusion, documented as an interactive Jupyter learning path with a reflective technical report.

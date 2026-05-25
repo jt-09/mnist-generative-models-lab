@@ -3,7 +3,7 @@
 ## Repository setup
 
 ```bash
-cd C:\Users\jayth\OneDrive\Desktop\mnist-generative-models-lab
+cd mnist-generative-models-lab
 git init
 git branch -M main
 git add .

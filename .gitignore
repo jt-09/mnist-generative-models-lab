@@ -21,3 +21,13 @@ data/
 # IDE
 .cursor/
 *.swp
+
+# LaTeX build artifacts
+reports/*.aux
+reports/*.bbl
+reports/*.blg
+reports/*.log
+reports/*.out
+
+# Extraction scratch files
+scripts/inventory.txt

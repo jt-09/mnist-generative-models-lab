@@ -26,7 +26,7 @@
 \maketitle
 
 \begin{abstract}
-I built a notebook-driven MNIST lab with two tracks: classification (from-scratch KNN and logistic regression through a PyTorch CNN) and generation (VAE, pixel-space DDPM, DCGAN, and a latent diffusion MLP). On the saved notebook outputs I kept, test accuracy climbs from \textbf{0.9705} (GPU KNN, $k{=}3$) to \textbf{0.9913} (comparison CNN), with logistic regression sitting lower at \textbf{0.9241} because it is strictly linear. The generative notebooks train end-to-end and produce readable digit samples, but I did not compute FID or Inception Score; my conclusions about sample quality are qualitative, based on the PNGs exported to \texttt{results/figures/}. I document both what worked as a learning path and what I would refactor next (duplicate VAE training, misleading notebook filename, missing quantitative generative metrics).
+I built a notebook-driven MNIST lab with two tracks: classification (from-scratch KNN and logistic regression through a PyTorch CNN) and generation (VAE, pixel-space DDPM, DCGAN, and a latent diffusion MLP). On the saved notebook outputs I kept, test accuracy climbs from \textbf{0.9705} (GPU KNN, $k{=}3$) to \textbf{0.9913} (comparison CNN), with logistic regression sitting lower at \textbf{0.9241} because it is strictly linear. The generative notebooks train end-to-end and produce readable digit samples, but I did not compute FID or Inception Score; my conclusions about sample quality are qualitative, based on the PNGs exported to \texttt{results/figures/}. What I learned most from this project is that a simple dataset still teaches real lessons about model capacity, inductive bias, and how generative families trade off blur, training cost, and sample sharpness. I also learned to document awkward results (the logistic dip, soft VAE reconstructions, duplicate training) instead of hiding them.
 \end{abstract}
 
 \section{Introduction}
@@ -34,12 +34,12 @@ I built a notebook-driven MNIST lab with two tracks: classification (from-scratc
 
 I chose MNIST~\citep{lecun1998gradient} because it is the standard place to make model behaviour visible before scaling up. This repo is not a production system; it is a curriculum I can walk through in Jupyter: understand the data, implement classical models by hand, add a small CNN, benchmark everything side by side, then explore compression (VAE), denoising (DDPM), adversarial training (DCGAN), and finally diffusion in a 16-D latent space.
 
-Figure~\ref{fig:roadmap} shows the order I used. Each notebook preserves embedded outputs so metrics and plots are inspectable without retraining. All figures in this report were copied from those outputs into \texttt{results/figures/}; I did not regenerate checkpoints from gitignored \texttt{training\_results/} or \texttt{*.pth} files.
+The main thing I wanted from the lab was not a leaderboard score. I wanted to feel each step: write the distance function for KNN, implement the softmax gradient by hand, watch a CNN filter turn into an edge detector, then see how a VAE bottleneck softens images before a diffusion model tries to undo noise in a smaller space. Figure~\ref{fig:roadmap} shows the order I used. Each notebook preserves embedded outputs so metrics and plots are inspectable without retraining. All figures in this report were copied from those outputs into \texttt{results/figures/}; I did not regenerate checkpoints from gitignored \texttt{training\_results/} or \texttt{*.pth} files.
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.98\textwidth]{../results/figures/00_roadmap/learning_path.png}
-  \caption{Learning path I followed: EDA $\rightarrow$ manual classifiers $\rightarrow$ CNN $\rightarrow$ multi-model comparison $\rightarrow$ generative models.}
+  \caption{Learning path I followed: EDA, manual classifiers, CNN, multi-model comparison, then generative models.}
   \label{fig:roadmap}
 \end{figure}
 
@@ -61,11 +61,11 @@ Before training anything, \texttt{eda\_analysis.ipynb} loads MNIST and walks thr
     \caption{Mean digit templates}
     \label{fig:mean}
   \end{subfigure}
-  \caption{EDA findings from my saved notebook run. Digits are centred and stroke thickness varies by class.}
+  \caption{EDA findings from my saved notebook run. Digits are centered and stroke thickness varies by class.}
   \label{fig:eda}
 \end{figure}
 
-The mean images (Figure~\ref{fig:mean}) look like the digits I expect, but PCA plots (Figure~\ref{fig:pca}) show substantial overlap between classes in the first two components. That overlap is my main motivation for non-linear models: a single linear boundary in pixel space cannot separate all ten digits cleanly, even though MNIST is ``easy'' by modern standards.
+The mean images (Figure~\ref{fig:mean}) look like the digits I expect, but PCA plots (Figure~\ref{fig:pca}) show substantial overlap between classes in the first two components. That overlap stuck with me. MNIST is often called ``easy,'' yet a single linear boundary in pixel space still cannot separate all ten digits cleanly. I took that as early evidence that I would need non-linear models, which is exactly what the later notebooks tested.
 
 \begin{figure}[H]
   \centering
@@ -77,9 +77,9 @@ The mean images (Figure~\ref{fig:mean}) look like the digits I expect, but PCA p
 \section{Classical and manual machine learning}
 \label{sec:manual}
 
-\subsection{KNN and the bias--variance tradeoff}
+\subsection{KNN and the bias-variance tradeoff}
 
-In \texttt{manual\_knn.ipynb} I implemented KNN in NumPy and then batched it on GPU with \texttt{torch.cdist}. A sweep over $k \in \{1,3,5,9,15,20\}$ (Figure~\ref{fig:knn}) shows accuracy peaking near $k{=}3$ at \textbf{0.9705} on the full test set. Very small $k$ is noisier; very large $k$ oversmooths decision boundaries. I found this plot more instructive than the final scalar accuracy because it makes the tradeoff concrete.
+In \texttt{manual\_knn.ipynb} I implemented KNN in NumPy and then batched it on GPU with \texttt{torch.cdist}. A sweep over $k \in \{1,3,5,9,15,20\}$ (Figure~\ref{fig:knn}) shows accuracy peaking near $k{=}3$ at \textbf{0.9705} on the full test set. Very small $k$ is noisier; very large $k$ oversmooths decision boundaries. I found this plot more instructive than the final scalar accuracy because it makes the tradeoff concrete. I learned that even on MNIST, KNN is a strong baseline if you can afford the distance computation, and that tuning $k$ is not cosmetic: it changes the kind of mistakes the model makes.
 
 \begin{figure}[H]
   \centering
@@ -88,9 +88,9 @@ In \texttt{manual\_knn.ipynb} I implemented KNN in NumPy and then batched it on 
   \label{fig:knn}
 \end{figure}
 
-\subsection{Logistic regression: a deliberate dip in the ladder}
+\subsection{Logistic regression: a dip I did not expect}
 
-I expected accuracy to improve monotonically as models gained capacity. That did not happen. My from-scratch softmax regression in \texttt{manual\_logistic\_reg.ipynb} plateaus at \textbf{0.9241}, below KNN and well below the manual MLP. I think that is mostly a capacity issue: logistic regression is a linear classifier in pixel space, and MNIST digits written in different styles still overlap when flattened to 784 dimensions. Figure~\ref{fig:misclass} shows the kind of errors I get---confusions between visually similar strokes (e.g.\ 4 vs 9, 3 vs 5).
+I expected accuracy to improve monotonically as models gained capacity. That did not happen. My from-scratch softmax regression in \texttt{manual\_logistic\_reg.ipynb} plateaus at \textbf{0.9241}, below KNN and well below the manual MLP. I think that is mostly a capacity issue: logistic regression is a linear classifier in pixel space, and MNIST digits written in different styles still overlap when flattened to 784 dimensions. Figure~\ref{fig:misclass} shows the kind of errors I get, mostly confusions between visually similar strokes (for example 4 vs 9, 3 vs 5). The lesson for me was blunt: more ``math in the notebook'' does not automatically beat a simple non-parametric method if the model class is too restrictive.
 
 \begin{figure}[H]
   \centering
@@ -101,7 +101,7 @@ I expected accuracy to improve monotonically as models gained capacity. That did
 
 \subsection{Manual MLP}
 
-Adding one ReLU hidden layer ($H{=}128$, 100 epochs) in \texttt{manual\_mlp.ipynb} raised accuracy to \textbf{0.9794}. The first-layer weight templates (Figure~\ref{fig:mlp}) look like crude stroke detectors; that made backprop feel less abstract than reading equations alone.
+Adding one ReLU hidden layer ($H{=}128$, 100 epochs) in \texttt{manual\_mlp.ipynb} raised accuracy to \textbf{0.9794}. The first-layer weight templates (Figure~\ref{fig:mlp}) look like crude stroke detectors; that made backprop feel less abstract than reading equations alone. I learned that a single hidden layer is enough to recover most of the KNN gap, which helped me see MLPs as ``learned feature extractors'' rather than black boxes.
 
 \begin{figure}[H]
   \centering
@@ -132,9 +132,9 @@ Table~\ref{tab:cls} summarises the classification ladder through the manual note
 \section{CNN baseline}
 \label{sec:cnn}
 
-\texttt{cnn.ipynb} implements a small \texttt{SimpleCNN}: two convolutional layers, max pooling, and two linear layers, trained five epochs with SGD. Test accuracy reaches \textbf{0.9871} by epoch 4. The jump from manual MLP to CNN is modest in absolute terms on MNIST, but I think the spatial inductive bias matters: convolutions reuse filters across the image instead of treating every pixel independently.
+\texttt{cnn.ipynb} implements a small \texttt{SimpleCNN}: two convolutional layers, max pooling, and two linear layers, trained five epochs with SGD. Test accuracy reaches \textbf{0.9871} by epoch 4. The jump from manual MLP to CNN is modest in absolute terms on MNIST, but I think the spatial inductive bias matters: convolutions reuse filters across the image instead of treating every pixel independently. Seeing the first-layer filters (Figure~\ref{fig:filters}) line up with coursework examples made the inductive-bias argument feel real rather than theoretical.
 
-Figure~\ref{fig:cnn-panel} shows my post-training analysis panel (confusion matrix, ROC-style curves, per-class behaviour). Figure~\ref{fig:filters} visualises first-layer conv filters---mostly edge and blob detectors, which matches what I expected from coursework examples.
+Figure~\ref{fig:cnn-panel} shows my post-training analysis panel (confusion matrix, ROC-style curves, per-class behaviour). I learned to read confusion matrices as a story about remaining errors, not just a single accuracy number.
 
 \begin{figure}[H]
   \centering
@@ -153,11 +153,11 @@ Figure~\ref{fig:cnn-panel} shows my post-training analysis panel (confusion matr
 \section{Generative models}
 \label{sec:gen}
 
-After classification, I worked through four generative approaches in increasing complexity. I did not run FID or IS; I judged samples by eye on the PNG grids in \texttt{results/figures/}.
+After classification, I worked through four generative approaches in increasing complexity. I did not run FID or IS; I judged samples by eye on the PNG grids in \texttt{results/figures/}. That is a weakness for claiming generative quality, but it forced me to look carefully at what each family actually outputs.
 
 \subsection{Variational autoencoder}
 
-\texttt{vae.ipynb} trains a convolutional VAE with a 16-D latent space for 50 epochs. Final train/validation total loss is \textbf{100.22 / 100.09} (reconstruction plus weighted KL). Reconstructions (Figure~\ref{fig:vae-recon}) preserve digit identity but look soft, which is what I usually see with Bernoulli/BCE or MSE-style decoders on MNIST.
+\texttt{vae.ipynb} trains a convolutional VAE with a 16-D latent space for 50 epochs. Final train/validation total loss is \textbf{100.22 / 100.09} (reconstruction plus weighted KL). Reconstructions (Figure~\ref{fig:vae-recon}) preserve digit identity but look soft, which is what I usually see with Bernoulli/BCE or MSE-style decoders on MNIST. I learned that compression and sharpness pull in opposite directions: the VAE gives me a usable latent space, but I should not expect crisp samples from the decoder alone.
 
 \begin{figure}[H]
   \centering
@@ -178,7 +178,7 @@ After classification, I worked through four generative approaches in increasing 
 
 \subsection{Pixel-space DDPM}
 
-\texttt{ddpm.ipynb} implements a DDPM~\citep{ho2020ddpm} with $T{=}300$ timesteps and a U-Net denoiser, trained 15 epochs. Average loss at epoch 15 is \textbf{0.0454} (Figure~\ref{fig:ddpm-loss}). Generated samples (Figure~\ref{fig:ddpm-grid}) look like MNIST digits on inspection, though training in full 784-D pixel space felt slower and heavier than the latent diffusion stage later.
+\texttt{ddpm.ipynb} implements a DDPM~\citep{ho2020ddpm} with $T{=}300$ timesteps and a U-Net denoiser, trained 15 epochs. Average loss at epoch 15 is \textbf{0.0454} (Figure~\ref{fig:ddpm-loss}). Generated samples (Figure~\ref{fig:ddpm-grid}) look like MNIST digits on inspection, though training in full 784-D pixel space felt slower and heavier than the latent diffusion stage later. I learned why latent diffusion exists: the math is elegant, but denoising every pixel step by step is expensive even on 28x28 images.
 
 \begin{figure}[H]
   \centering
@@ -199,7 +199,7 @@ After classification, I worked through four generative approaches in increasing 
 
 \subsection{DCGAN}
 
-\texttt{dcgan.ipynb} trains a DCGAN~\citep{radford2016dcgan} for 50 epochs. Final generator/discriminator losses are \textbf{3.41 / 0.32}. The sample grid (Figure~\ref{fig:dcgan}) shows recognisable digits; interpolation (Figure~\ref{fig:dcgan-interp}) suggests the latent space is at least locally smooth. I would not call GAN training ``stable'' here---the loss balance moved around---but the saved outputs are usable for demonstration.
+\texttt{dcgan.ipynb} trains a DCGAN~\citep{radford2016dcgan} for 50 epochs. Final generator/discriminator losses are \textbf{3.41 / 0.32}. The sample grid (Figure~\ref{fig:dcgan}) shows recognisable digits; interpolation (Figure~\ref{fig:dcgan-interp}) suggests the latent space is at least locally smooth. I would not call GAN training stable here. The loss balance moved around, and I spent more time watching curves than I would like. Still, the saved outputs are usable for demonstration, and I learned that adversarial training can produce sharper digits than my VAE decoder, at the cost of trickier optimization.
 
 \begin{figure}[H]
   \centering
@@ -220,7 +220,7 @@ After classification, I worked through four generative approaches in increasing 
 
 \subsection{Latent diffusion MLP}
 
-The notebook \texttt{vae + 1d unet (latent diff) (1).ipynb} retrains a VAE, extracts latents, and trains a \texttt{LatentDiffusionMLP} for 150 epochs (MSE \textbf{0.224} near the end). Despite ``1d unet'' in the filename, the denoiser is an MLP, not a U-Net---a naming mistake I should fix. Figure~\ref{fig:latent} shows reconstructions and generated samples from that notebook. Functionally, this is the pattern I later used on CIFAR at larger scale: compress first, diffuse second.
+The notebook \texttt{vae + 1d unet (latent diff) (1).ipynb} retrains a VAE, extracts latents, and trains a \texttt{LatentDiffusionMLP} for 150 epochs (MSE \textbf{0.224} near the end). Despite ``1d unet'' in the filename, the denoiser is an MLP, not a U-Net. That is a naming mistake I should fix. Figure~\ref{fig:latent} shows reconstructions and generated samples from that notebook. Functionally, this is the pattern I later used on CIFAR at larger scale: compress first, diffuse second. I learned that reusing the VAE idea across notebooks is convenient while learning, but duplicating training is poor engineering hygiene.
 
 \begin{figure}[H]
   \centering
@@ -258,14 +258,27 @@ The notebook \texttt{vae + 1d unet (latent diff) (1).ipynb} retrains a VAE, extr
   \caption{Multi-model comparison insights from my saved outputs.}
 \end{figure}
 
-On the generative side, I think of the tradeoffs this way: VAEs give cheap latent codes but blurry decoders; pixel DDPMs are faithful to the DDPM math but expensive in 784-D; GANs can look sharp but need careful monitoring; latent diffusion is efficient once latents exist but inherits VAE quality. I did not run controlled ablations to rank them quantitatively.
+On the generative side, I now think of the tradeoffs this way: VAEs give cheap latent codes but blurry decoders; pixel DDPMs are faithful to the DDPM math but expensive in 784-D; GANs can look sharp but need careful monitoring; latent diffusion is efficient once latents exist but inherits VAE quality. I did not run controlled ablations to rank them quantitatively, so this is personal takeaway from the PNGs, not a benchmark result.
+
+\section{What I learned}
+\label{sec:learned}
+
+Looking back at the full lab, a few lessons stand out:
+
+\begin{itemize}[noitemsep]
+  \item \textbf{Start with the data.} EDA took time, but it explained later failures (linear models struggling, confusion pairs that look like handwriting variation).
+  \item \textbf{Implement before abstracting.} Manual KNN, logistic regression, and MLP code made later PyTorch models easier to reason about.
+  \item \textbf{Accuracy ladders lie a little.} Logistic regression at 0.9241 is not a bug; it is a reminder that model class matters as much as tuning.
+  \item \textbf{Generative models teach different skills.} VAEs taught compression and ELBO tradeoffs; DDPMs taught noise schedules; GANs taught unstable co-training; latent diffusion tied the threads together.
+  \item \textbf{Document the rough edges.} Duplicate VAE training, unpinned dependencies, and missing FID scores are part of the honest story of how I built this repo.
+\end{itemize}
 
 \section{Limitations}
 \label{sec:limits}
 
 \begin{itemize}[noitemsep]
   \item \textbf{No FID / IS.} I did not compute standard generative metrics. Claims about sample quality are qualitative.
-  \item \textbf{28$\times$28 grayscale only.} Findings may not transfer to colour or high-resolution data.
+  \item \textbf{28x28 grayscale only.} Findings may not transfer to color or high-resolution data.
   \item \textbf{Duplicate VAE training.} \texttt{vae.ipynb} and the latent-diffusion notebook both train a VAE; I should load a checkpoint instead of retraining.
   \item \textbf{Misleading filename.} The latent-diffusion notebook name references a 1D U-Net; the implementation is an MLP.
   \item \textbf{Notebook hygiene.} \texttt{02\_mnist\_models.ipynb} may list duplicate CNN rows from re-runs; I cite \textbf{0.9913} as the comparison result.
@@ -284,7 +297,7 @@ On the generative side, I think of the tradeoffs this way: VAEs give cheap laten
 
 \section{Conclusion}
 
-I built an end-to-end MNIST lab that reads like a course project I actually ran: EDA, manual implementations, a CNN benchmark, and four generative families with saved plots in \texttt{results/}. Classification reaches \textbf{0.9913} on the comparison CNN; generative models produce inspectable digit samples without me claiming state-of-the-art numbers. I think documenting the logistic-regression dip, the soft VAE reconstructions, and the missing FID metrics is as important as listing the peak accuracies---it makes the repo credible for someone reviewing my work.
+I built an end-to-end MNIST lab that reads like a course project I actually ran: EDA, manual implementations, a CNN benchmark, and four generative families with saved plots in \texttt{results/}. Classification reaches \textbf{0.9913} on the comparison CNN; generative models produce inspectable digit samples without me claiming state-of-the-art numbers. The part I am most glad I kept is the reflective thread: the logistic-regression dip, the soft VAE reconstructions, the heavy pixel DDPM, and the missing FID metrics. Those details explain what I learned, not just what I achieved.
 
 \bibliographystyle{plainnat}
 \bibliography{references}
