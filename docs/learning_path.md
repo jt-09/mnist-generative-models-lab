@@ -48,4 +48,4 @@ Paths like `./training_results/vae_model.pth` and `./latent_data/` are relative 
 
 - Fashion-MNIST swap-in (same pipeline shape)
 - FID / IS metrics for generative outputs
-- Deduplicate VAE training between `vae.ipynb` and the latent-diffusion notebook by loading a saved checkpoint
+- Deduplicate VAE training between `vae.ipynb` and `latent_diffusion_mlp.ipynb` by loading a saved checkpoint

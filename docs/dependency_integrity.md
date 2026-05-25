@@ -6,7 +6,7 @@ How Python packages, data loaders, and artifact paths interact across notebooks.
 
 | Item | Status |
 |------|--------|
-| Python version | TODO: verify — TensorFlow and PyTorch coexist in notebooks |
+| Python version | **3.13.5** tested (TensorFlow and PyTorch coexist in notebooks) |
 | Virtual env | Recommended: `python -m venv venv` at repo root |
 | Install | `pip install -r requirements.txt` |
 
@@ -36,7 +36,7 @@ No local image files are committed. MNIST auto-downloads:
 | Loader | Notebooks |
 |--------|-----------|
 | `tensorflow.keras.datasets.mnist` | `manual_knn.ipynb` (CPU), `manual_logistic_reg.ipynb`, `eda_analysis.ipynb`, `cnn.ipynb`, `dcgan.ipynb`, `02_mnist_models.ipynb` |
-| `torchvision.datasets.MNIST` | `manual_knn.ipynb` (GPU), `vae.ipynb`, `ddpm.ipynb`, latent-diff notebook |
+| `torchvision.datasets.MNIST` | `manual_knn.ipynb` (GPU), `vae.ipynb`, `ddpm.ipynb`, `latent_diffusion_mlp.ipynb` |
 
 First run requires network access. Caches live in user home (`~/.keras`, `~/.cache/torch`).
 
@@ -46,7 +46,7 @@ First run requires network access. Caches live in user home (`~/.keras`, `~/.cac
 
 | Path | Notebooks | Gitignored |
 |------|-----------|------------|
-| `./training_results/vae_model.pth` | `vae.ipynb`, latent-diff | Yes |
+| `./training_results/vae_model.pth` | `vae.ipynb`, `latent_diffusion_mlp.ipynb` | Yes |
 | `./training_results/*.png`, `*.pkl` | `vae.ipynb` | Yes |
 | `./latent_data/mnist_latents_*.npy` | Latent-diff | Yes |
 | `ddpm_mnist.pth`, `ddpm_mnist_model.pth` | `ddpm.ipynb` | Yes |

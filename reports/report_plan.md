@@ -1,7 +1,7 @@
 # Technical Report Plan
 
 Target: ~2000 words. Audience: ML recruiter, technical interviewer, portfolio reviewer.  
-Deliverables: this outline now; `report.tex` and `report.pdf` later.
+Deliverables: `report.tex`, `report.md`, `report.pdf`, and `compile_report.ps1` (rebuild script).
 
 ## Section outline
 
@@ -13,7 +13,7 @@ Deliverables: this outline now; `report.tex` and `report.pdf` later.
 | 4 | CNN baseline | 200 | SimpleCNN architecture; 98%+ accuracy; filter visualizations | Confusion matrix, activation maps (`cnn.ipynb`) |
 | 5 | Generative models | 500 | VAE (16-D ELBO), pixel DDPM (T=300), DCGAN, latent diffusion MLP | VAE reconstructions; DDPM samples; DCGAN grid; latent samples |
 | 6 | Comparison and insights | 250 | When deep learning wins; comparison table (0.9913 CNN); generative tradeoffs | `02_mnist_models.ipynb` DataFrame |
-| 7 | Limitations | 200 | No FID; 28×28 grayscale only; VAE duplication; misleading latent-diff filename | — |
+| 7 | Limitations | 200 | No FID; 28x28 grayscale only; VAE duplication | — |
 | 8 | Future work | 150 | Deduped VAE pipeline; FID metrics; Fashion-MNIST extension | — |
 
 **Total:** ~2000 words
@@ -65,7 +65,7 @@ Deliverables: this outline now; `report.tex` and `report.pdf` later.
 - [x] Verify all metrics still match embedded outputs after any notebook edit
 - [x] Decide whether to include GPU vs CPU KNN comparison in §3 (GPU k-sweep used in report)
 - [x] Add bibliography entries for VAE, DDPM, DCGAN original papers (`reports/references.bib`)
-- [ ] Pin dependency versions in `requirements.txt` and note in §7 reproducibility (noted as limitation in report)
+- [x] Pin dependency versions in `requirements.txt` and note in README reproducibility section
 
 ## Suggested narrative arc
 
@@ -77,4 +77,4 @@ Deliverables: this outline now; `report.tex` and `report.pdf` later.
 
 ## Resume bullet (for report abstract)
 
-Built an end-to-end MNIST ML lab—from scratch KNN, logistic regression, and MLP through CNN classification (99%+ accuracy) to generative models including VAE, DDPM, DCGAN, and latent diffusion—documented as an interactive Jupyter learning path.
+Built an end-to-end MNIST ML lab from scratch KNN, logistic regression, and MLP through CNN classification (99%+ accuracy) to generative models including VAE, DDPM, DCGAN, and latent diffusion, documented as an interactive Jupyter learning path.

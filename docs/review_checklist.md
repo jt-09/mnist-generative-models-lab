@@ -15,7 +15,7 @@ Use before merging each PR or before publishing `main`.
 - [ ] Embedded outputs preserved (metrics visible without retraining)
 - [ ] Cells run top-to-bottom when cwd = repo root
 - [ ] No committed secrets or API keys
-- [ ] Colab `drive.mount` guarded or removed in latent-diff notebook
+- [ ] Colab `drive.mount` guarded or removed in `latent_diffusion_mlp.ipynb`
 - [ ] No large binary artifacts inside `.ipynb` files (check file size)
 
 ## Metrics accuracy (from outputs only)
@@ -62,4 +62,4 @@ Use before merging each PR or before publishing `main`.
 - [ ] GitHub description set
 - [ ] Repo is public (if intended for portfolio)
 - [ ] Resume bullet in README is accurate
-- [ ] Limitations section mentions: no FID, latent-diff filename, VAE duplication
+- [ ] Limitations section mentions: no FID, VAE duplication

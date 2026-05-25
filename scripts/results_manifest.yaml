@@ -103,7 +103,7 @@ figures:
     notebook: notebooks/latent_diffusion_mlp.ipynb
     cell: 7
     output: 0
-    role: VAE reconstructions in latent-diff notebook
+    role: VAE reconstructions in latent_diffusion_mlp.ipynb
 
   - dest: figures/10_latent_diff/diffusion_samples.png
     notebook: notebooks/latent_diffusion_mlp.ipynb

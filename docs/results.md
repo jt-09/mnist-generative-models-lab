@@ -48,7 +48,7 @@ Visual results live in notebook output cells:
 
 | Path | Created by | Contents |
 |------|------------|----------|
-| `training_results/` | `vae.ipynb`, latent-diff notebook | `vae_model.pth`, PNGs, pickles |
+| `training_results/` | `vae.ipynb`, `latent_diffusion_mlp.ipynb` | `vae_model.pth`, PNGs, pickles |
 | `latent_data/` | Latent-diff notebook | `mnist_latents_train/val.npy`, labels |
 | `ddpm_mnist*.pth` | `ddpm.ipynb` | DDPM checkpoints |
 
@@ -58,7 +58,7 @@ Regenerate by re-running the corresponding notebook from repo root.
 
 - `02_mnist_models.ipynb` may list duplicate CNN rows from multiple runs — cite **0.9913** as the comparison CNN result.
 - Latent-diffusion notebook filename references "1d unet" but implements `LatentDiffusionMLP`.
-- VAE training appears in both `vae.ipynb` and the latent-diffusion notebook; checkpoint reuse avoids redundant training.
+- VAE training appears in both `vae.ipynb` and `latent_diffusion_mlp.ipynb`; checkpoint reuse avoids redundant training.
 
 ## Future metrics (not yet reported)
 

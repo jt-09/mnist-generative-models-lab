@@ -218,6 +218,7 @@ VAE plus `LatentDiffusionMLP` in latent space. Trains VAE, extracts latents, run
 | [`reports/report_plan.md`](reports/report_plan.md) | ~2000-word report outline |
 | [`reports/report.pdf`](reports/report.pdf) | Technical report (PDF) |
 | [`reports/report.md`](reports/report.md) | Technical report (Markdown) |
+| [`reports/compile_report.ps1`](reports/compile_report.ps1) | Rebuild PDF (`pdflatex` + `bibtex`) |
 | [`results/RESULTS_INDEX.md`](results/RESULTS_INDEX.md) | Collated figures and metrics from notebook outputs |
 
 ## Resume bullet
