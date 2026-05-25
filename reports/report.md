@@ -122,7 +122,7 @@ After classification, I worked through four generative approaches. I did not run
 
 ### 5.4 Latent diffusion MLP
 
-The notebook `vae + 1d unet (latent diff) (1).ipynb` trains VAE + `LatentDiffusionMLP` (MSE **0.224**). Despite "1d unet" in the filename, the denoiser is an MLP, not a U-Net. That is a naming mistake I should fix. I learned that reusing the VAE idea across notebooks is convenient while learning, but duplicating training is poor engineering hygiene.
+The notebook `latent_diffusion_mlp.ipynb` trains VAE + `LatentDiffusionMLP` (MSE **0.224**). I learned that reusing the VAE idea across notebooks is convenient while learning, but duplicating training is poor engineering hygiene.
 
 | VAE reconstructions | Diffusion samples |
 |---------------------|-------------------|
@@ -158,10 +158,8 @@ Looking back at the full lab, a few lessons stand out:
 
 - **No FID / IS.** Qualitative generative evaluation only.
 - **28x28 grayscale.** Not representative of real vision tasks.
-- **Duplicate VAE training** across `vae.ipynb` and the latent-diff notebook.
-- **Misleading latent-diff filename** (MLP, not U-Net).
+- **Duplicate VAE training** across `vae.ipynb` and `latent_diffusion_mlp.ipynb`.
 - **Duplicate CNN rows** possible in the comparison notebook. I cite **0.9913**.
-- **Unpinned dependencies.** Embedded outputs are the documentation source of truth.
 
 ---
 
@@ -169,9 +167,9 @@ Looking back at the full lab, a few lessons stand out:
 
 - Deduplicate VAE pipeline (load checkpoint instead of retraining).
 - Add FID or classifier-based generative scores.
-- Rename latent-diff notebook; guard Colab cells.
+- Guard Colab cells; dedupe VAE training across notebooks.
 - Fashion-MNIST extension with the same structure.
-- Pin torch/tensorflow versions; optional `nbconvert` CI smoke test.
+- Optional `nbconvert` CI smoke test.
 
 ---
 

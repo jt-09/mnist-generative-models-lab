@@ -1,10 +1,11 @@
-numpy          # TODO: pin after environment check
-pandas         # TODO: pin after environment check
-seaborn        # TODO: pin after environment check
-matplotlib     # TODO: pin after environment check
-scikit-learn   # TODO: pin after environment check
-jupyter        # TODO: pin after environment check
-torch          # TODO: pin after environment check
-torchvision    # TODO: pin after environment check
-tensorflow     # TODO: pin after environment check
-tqdm           # TODO: pin after environment check
+# Tested on Python 3.13.5 (Windows). Install: pip install -r requirements.txt
+numpy==2.2.6
+pandas==2.3.3
+seaborn==0.13.2
+matplotlib==3.10.6
+scikit-learn==1.7.1
+jupyter==1.1.1
+torch==2.12.1
+torchvision==0.27.1
+tensorflow==2.21.0
+tqdm==4.67.1

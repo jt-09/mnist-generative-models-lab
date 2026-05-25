@@ -220,13 +220,13 @@ After classification, I worked through four generative approaches in increasing 
 
 \subsection{Latent diffusion MLP}
 
-The notebook \texttt{vae + 1d unet (latent diff) (1).ipynb} retrains a VAE, extracts latents, and trains a \texttt{LatentDiffusionMLP} for 150 epochs (MSE \textbf{0.224} near the end). Despite ``1d unet'' in the filename, the denoiser is an MLP, not a U-Net. That is a naming mistake I should fix. Figure~\ref{fig:latent} shows reconstructions and generated samples from that notebook. Functionally, this is the pattern I later used on CIFAR at larger scale: compress first, diffuse second. I learned that reusing the VAE idea across notebooks is convenient while learning, but duplicating training is poor engineering hygiene.
+The notebook \texttt{latent\_diffusion\_mlp.ipynb} retrains a VAE, extracts latents, and trains a \texttt{LatentDiffusionMLP} for 150 epochs (MSE \textbf{0.224} near the end). Figure~\ref{fig:latent} shows reconstructions and generated samples from that notebook. Functionally, this is the pattern I later used on CIFAR at larger scale: compress first, diffuse second. I learned that reusing the VAE idea across notebooks is convenient while learning, but duplicating training is poor engineering hygiene.
 
 \begin{figure}[H]
   \centering
   \begin{subfigure}[b]{0.48\textwidth}
     \includegraphics[width=\textwidth]{../results/figures/10_latent_diff/vae_reconstructions.png}
-    \caption{VAE reconstructions (latent-diff notebook)}
+    \caption{VAE reconstructions (\texttt{latent\_diffusion\_mlp.ipynb})}
   \end{subfigure}
   \hfill
   \begin{subfigure}[b]{0.48\textwidth}
@@ -279,10 +279,8 @@ Looking back at the full lab, a few lessons stand out:
 \begin{itemize}[noitemsep]
   \item \textbf{No FID / IS.} I did not compute standard generative metrics. Claims about sample quality are qualitative.
   \item \textbf{28x28 grayscale only.} Findings may not transfer to color or high-resolution data.
-  \item \textbf{Duplicate VAE training.} \texttt{vae.ipynb} and the latent-diffusion notebook both train a VAE; I should load a checkpoint instead of retraining.
-  \item \textbf{Misleading filename.} The latent-diffusion notebook name references a 1D U-Net; the implementation is an MLP.
+  \item \textbf{Duplicate VAE training.} \texttt{vae.ipynb} and \texttt{latent\_diffusion\_mlp.ipynb} both train a VAE; I should load a checkpoint instead of retraining.
   \item \textbf{Notebook hygiene.} \texttt{02\_mnist\_models.ipynb} may list duplicate CNN rows from re-runs; I cite \textbf{0.9913} as the comparison result.
-  \item \textbf{Reproducibility.} \texttt{requirements.txt} does not pin versions; I relied on embedded outputs as the documentation source of truth.
 \end{itemize}
 
 \section{Future work}
@@ -290,9 +288,9 @@ Looking back at the full lab, a few lessons stand out:
 \begin{itemize}[noitemsep]
   \item Deduplicate the VAE pipeline (train once, load \texttt{vae\_model.pth} elsewhere).
   \item Add FID or a simple classifier-based generative score.
-  \item Rename the latent-diffusion notebook and guard Colab-only cells for local runs.
+  \item Guard Colab-only cells for local runs; dedupe VAE training across notebooks.
   \item Extend the same notebook structure to Fashion-MNIST.
-  \item Pin \texttt{torch} and \texttt{tensorflow} versions and add a lightweight \texttt{nbconvert} smoke test in CI.
+  \item Add a lightweight \texttt{nbconvert} smoke test in CI.
 \end{itemize}
 
 \section{Conclusion}

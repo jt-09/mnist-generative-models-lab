@@ -117,12 +117,10 @@ DCGAN with separate generator and discriminator, 50 epochs. Includes latent inte
 
 ---
 
-## `vae + 1d unet (latent diff) (1).ipynb`
+## `latent_diffusion_mlp.ipynb`
 
 **Track:** Generative  
 **Framework:** PyTorch
-
-**Filename note:** Despite "1d unet" in the name, the diffusion model is `LatentDiffusionMLP`, not a 1D U-Net.
 
 Pipeline: train or load VAE → extract latents to `./latent_data/` → train class-conditioned latent diffusion MLP (150 epochs). May contain a Colab `drive.mount` cell — guard or remove for local runs.
 

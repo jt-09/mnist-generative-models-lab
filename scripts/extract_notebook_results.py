@@ -38,7 +38,7 @@ EXPECTED_GENERATIVE = {
     "latent_diff_mse": 0.224,
 }
 
-LATENT_NB = "vae + 1d unet (latent diff) (1).ipynb"
+LATENT_NB = "latent_diffusion_mlp.ipynb"
 
 
 def load_nb(path: Path) -> dict:

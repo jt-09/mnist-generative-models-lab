@@ -22,7 +22,7 @@ Ordered syllabus for the MNIST Generative Models Lab. Run notebooks top to botto
 | 7 | `vae.ipynb` | 16-D VAE, ELBO, reconstructions | PyTorch, Track A helpful |
 | 8 | `ddpm.ipynb` | Pixel-space DDPM (T=300, U-Net denoiser) | Diffusion intuition |
 | 9 | `dcgan.ipynb` | DCGAN generator/discriminator | Adversarial training basics |
-| 10 | `vae + 1d unet (latent diff) (1).ipynb` | VAE + `LatentDiffusionMLP` in latent space | Complete `vae.ipynb` first |
+| 10 | `latent_diffusion_mlp.ipynb` | VAE + `LatentDiffusionMLP` in latent space | Complete `vae.ipynb` first |
 
 **Generative milestone:** VAE train/val loss **100.22 / 100.09**; DDPM avg loss **0.0454**; DCGAN G/D **3.41 / 0.32**; latent diffusion MSE **0.224**.
 

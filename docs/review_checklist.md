@@ -30,7 +30,7 @@ Use before merging each PR or before publishing `main`.
 | VAE train/val loss | 100.22 / 100.09 | `vae.ipynb` |
 | DDPM avg loss | 0.0454 | `ddpm.ipynb` |
 | DCGAN G/D loss | 3.41 / 0.32 | `dcgan.ipynb` |
-| Latent diff MSE | 0.224 | `vae + 1d unet (latent diff) (1).ipynb` |
+| Latent diff MSE | 0.224 | `latent_diffusion_mlp.ipynb` |
 
 - [ ] `docs/results.md` matches table above
 - [ ] `README.md` results tables match table above

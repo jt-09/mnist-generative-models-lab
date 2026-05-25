@@ -1,5 +1,11 @@
 # MNIST Generative Models Lab
 
+> Built an end-to-end MNIST ML lab from scratch KNN, logistic regression, and MLP through CNN classification (99%+ accuracy) to generative models including VAE, DDPM, DCGAN, and latent diffusion.
+
+| KNN k-sweep | Accuracy ladder | DCGAN samples |
+|:---:|:---:|:---:|
+| ![](results/figures/02_knn/k_sweep.png) | ![](results/figures/06_comparison/results_bar_chart.png) | ![](results/figures/09_dcgan/generated_digits.png) |
+
 A notebook-driven learning lab on MNIST that progresses from scratch implementations (KNN, logistic regression, MLP) through EDA and CNN classification to generative models: VAE, pixel-space DDPM, DCGAN, and VAE + latent diffusion MLP. Ten interactive notebooks preserve embedded outputs so metrics and plots are visible without retraining.
 
 **Technical report:** [`reports/report.pdf`](reports/report.pdf) (PDF) | [`reports/report.md`](reports/report.md) (Markdown)  
@@ -17,7 +23,7 @@ I built this repo as a hands-on curriculum, not a single benchmark script. The g
 | 2. Manual classification | KNN, logistic regression, MLP from scratch | `manual_knn.ipynb`, `manual_logistic_reg.ipynb`, `manual_mlp.ipynb` | Accuracy ladder to **0.9794** (MLP) |
 | 3. Deep learning baseline | PyTorch CNN | `cnn.ipynb` | **0.9871** test accuracy |
 | 4. Benchmark | sklearn + PyTorch comparison harness | `02_mnist_models.ipynb` | CNN **0.9913**; confusion analysis |
-| 5. Generative models | VAE, pixel DDPM, DCGAN, latent diffusion MLP | `vae.ipynb`, `ddpm.ipynb`, `dcgan.ipynb`, latent-diff notebook | Qualitative digit samples in `results/figures/` |
+| 5. Generative models | VAE, pixel DDPM, DCGAN, latent diffusion MLP | `vae.ipynb`, `ddpm.ipynb`, `dcgan.ipynb`, `latent_diffusion_mlp.ipynb` | Qualitative digit samples in `results/figures/` |
 
 Two tracks run through the repo: **classification** (phases 1 to 4) and **generation** (phase 5). See the learning roadmap below for the recommended notebook order.
 
@@ -43,7 +49,7 @@ flowchart LR
     CMP --> VAE[vae.ipynb]
     VAE --> DDPM[ddpm.ipynb]
     DDPM --> GAN[dcgan.ipynb]
-    GAN --> LD["vae + 1d unet (latent diff) (1).ipynb"]
+    GAN --> LD[latent_diffusion_mlp.ipynb]
 ```
 
 | Step | Notebook | Track |
@@ -57,7 +63,7 @@ flowchart LR
 | 7 | `vae.ipynb` | Generative |
 | 8 | `ddpm.ipynb` | Generative |
 | 9 | `dcgan.ipynb` | Generative |
-| 10 | `vae + 1d unet (latent diff) (1).ipynb` | Generative |
+| 10 | `latent_diffusion_mlp.ipynb` | Generative |
 
 See [`docs/learning_path.md`](docs/learning_path.md) for pacing and prerequisites.
 
@@ -82,7 +88,7 @@ The manual models show a clean learning ladder: KNN does well with almost no tra
 | VAE (16-D latent) | Train / val loss | **100.22 / 100.09** | `vae.ipynb` |
 | DDPM (T=300) | Avg loss (ep 15) | **0.0454** | `ddpm.ipynb` |
 | DCGAN | G loss / D loss | **3.41 / 0.32** | `dcgan.ipynb` |
-| Latent diffusion MLP | MSE (ep 150) | **0.224** | `vae + 1d unet (latent diff) (1).ipynb` |
+| Latent diffusion MLP | MSE (ep 150) | **0.224** | `latent_diffusion_mlp.ipynb` |
 
 Visual samples (reconstructions, denoising grids, GAN outputs) are exported to [`results/figures/`](results/figures/) and embedded in notebook output cells. See [`docs/results.md`](docs/results.md) for the full metrics table and [`reports/report.pdf`](reports/report.pdf) for the write-up.
 
@@ -90,9 +96,13 @@ Visual samples (reconstructions, denoising grids, GAN outputs) are exported to [
 
 ```bash
 cd mnist-generative-models-lab
+python -m venv venv
+# Windows: venv\Scripts\activate  |  macOS/Linux: source venv/bin/activate
 pip install -r requirements.txt
 jupyter notebook notebooks/
 ```
+
+Tested on **Python 3.13.5**. Package versions are pinned in `requirements.txt`.
 
 Run cells top to bottom. **Use the repository root as the working directory** so paths like `./training_results/` resolve correctly.
 
@@ -100,6 +110,7 @@ Run cells top to bottom. **Use the repository root as the working directory** so
 
 ```text
 mnist-generative-models-lab/
+├── LICENSE
 ├── README.md
 ├── requirements.txt
 ├── .gitignore
@@ -127,8 +138,8 @@ Training outputs are **gitignored** and regenerated locally:
 
 | Path | Created by | Contents |
 |------|------------|----------|
-| `training_results/` | `vae.ipynb`, latent-diff notebook | `vae_model.pth`, plots, pickles |
-| `latent_data/` | Latent-diff notebook | `mnist_latents_*.npy`, label arrays |
+| `training_results/` | `vae.ipynb`, `latent_diffusion_mlp.ipynb` | `vae_model.pth`, plots, pickles |
+| `latent_data/` | `latent_diffusion_mlp.ipynb` | `mnist_latents_*.npy`, label arrays |
 | `ddpm_mnist*.pth` | `ddpm.ipynb` | DDPM checkpoints |
 
 Re-run the relevant notebook to recreate artifacts. Metrics in this README come from **saved notebook runs**; full retraining is optional.
@@ -162,8 +173,8 @@ Pixel-space DDPM with T=300 timesteps and U-Net denoiser, 15 epochs.
 ### `dcgan.ipynb`
 DCGAN generator/discriminator, 50 epochs, latent interpolation.
 
-### `vae + 1d unet (latent diff) (1).ipynb`
-VAE plus `LatentDiffusionMLP` in latent space (filename says "1d unet" but the model is an MLP, not a U-Net). Trains VAE, extracts latents, runs 150-epoch diffusion. The opening Colab `drive.mount` cell is guarded and skipped when running locally.
+### `latent_diffusion_mlp.ipynb`
+VAE plus `LatentDiffusionMLP` in latent space. Trains VAE, extracts latents, runs 150-epoch diffusion. The opening Colab `drive.mount` cell is guarded and skipped when running locally.
 
 ## Parameters that change the story
 
@@ -179,22 +190,21 @@ VAE plus `LatentDiffusionMLP` in latent space (filename says "1d unet" but the m
 - Results below are from embedded notebook outputs unless you retrain
 - MNIST download is deterministic given standard loaders
 - TensorFlow and PyTorch both required; see [`docs/dependency_integrity.md`](docs/dependency_integrity.md)
-- Package versions: TODO pin after environment check (`requirements.txt`)
+- Dependencies pinned in `requirements.txt` (tested on Python 3.13.5)
 
 ## Limitations
 
 - 28x28 grayscale only; not representative of real-world vision
 - No FID or Inception Score for generative evaluation
-- Latent-diffusion notebook filename is misleading (`LatentDiffusionMLP`, not 1D U-Net)
-- VAE training duplicated between `vae.ipynb` and the latent-diff notebook
+- VAE training duplicated between `vae.ipynb` and `latent_diffusion_mlp.ipynb`
 - `02_mnist_models.ipynb` may contain duplicate CNN rows from re-runs
 
 ## Future work
 
-- Deduplicate VAE pipeline (load checkpoint in latent-diff notebook)
+- Deduplicate VAE pipeline (load checkpoint in `latent_diffusion_mlp.ipynb`)
 - Add FID / IS metrics for generative models
 - Fashion-MNIST extension with the same notebook structure
-- Pin torch and tensorflow versions; optional `nbconvert` CI smoke test
+- Optional `nbconvert` CI smoke test
 
 ## Documentation index
 

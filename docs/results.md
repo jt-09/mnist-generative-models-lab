@@ -27,7 +27,7 @@ Logistic regression sits lower than KNN/MLP on this split because it is a strict
 | VAE | Train / val loss | **100.22 / 100.09** | `vae.ipynb` | 16-D latent, 50 epochs |
 | DDPM | Average loss | **0.0454** | `ddpm.ipynb` | T=300, epoch 15 |
 | DCGAN | G loss / D loss | **3.41 / 0.32** | `dcgan.ipynb` | 50 epochs |
-| Latent diffusion MLP | MSE | **0.224** | `vae + 1d unet (latent diff) (1).ipynb` | Epoch 150 |
+| Latent diffusion MLP | MSE | **0.224** | `latent_diffusion_mlp.ipynb` | Epoch 150 |
 
 ## Qualitative outputs
 
@@ -42,7 +42,7 @@ Visual results live in notebook output cells:
 | VAE reconstructions, training curves | `vae.ipynb` |
 | DDPM sample grid | `ddpm.ipynb` |
 | DCGAN generated digits, interpolation | `dcgan.ipynb` |
-| Latent diffusion samples | `vae + 1d unet (latent diff) (1).ipynb` |
+| Latent diffusion samples | `latent_diffusion_mlp.ipynb` |
 
 ## Artifact locations (gitignored)
 

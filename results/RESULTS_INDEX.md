@@ -35,8 +35,8 @@ All assets extracted from saved notebook cell outputs (no retraining).
 | `figures/08_ddpm/denoising_grid.png` | `notebooks/ddpm.ipynb` | 18 | DDPM generated samples grid |
 | `figures/09_dcgan/generated_digits.png` | `notebooks/dcgan.ipynb` | 6 | Final DCGAN sample grid and loss history |
 | `figures/09_dcgan/latent_interpolation.png` | `notebooks/dcgan.ipynb` | 7 | Latent space interpolation |
-| `figures/10_latent_diff/vae_reconstructions.png` | `notebooks/vae + 1d unet (latent diff) (1).ipynb` | 7 | VAE reconstructions in latent-diff notebook |
-| `figures/10_latent_diff/diffusion_samples.png` | `notebooks/vae + 1d unet (latent diff) (1).ipynb` | 16 | Latent diffusion generated digits |
+| `figures/10_latent_diff/vae_reconstructions.png` | `notebooks/latent_diffusion_mlp.ipynb` | 7 | VAE reconstructions in latent-diff notebook |
+| `figures/10_latent_diff/diffusion_samples.png` | `notebooks/latent_diffusion_mlp.ipynb` | 16 | Latent diffusion generated digits |
 | `figures/00_roadmap/learning_path.png` | generated | — | Learning path diagram |
 | `figures/08_ddpm/loss_curve.png` | ddpm.ipynb streams | — | DDPM loss from epoch logs |
 | `figures/06_comparison/results_bar_chart.png` | metrics JSON | — | Accuracy ladder bar chart |

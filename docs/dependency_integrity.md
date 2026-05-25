@@ -27,7 +27,7 @@ From `requirements.txt`:
 | `tensorflow` | Keras MNIST in several classification + DCGAN notebooks |
 | `tqdm` | Training loops in generative notebooks |
 
-**Version pins:** All packages marked `TODO: pin after environment check` in `requirements.txt`. Do not invent versions until a clean install is verified on target hardware.
+**Version pins:** Locked in `requirements.txt` (tested on Python 3.13.5, Windows).
 
 ## Data loading
 
@@ -63,7 +63,7 @@ TensorFlow and PyTorch are both required. They do not share tensors — each not
 
 ## Colab-specific code
 
-`vae + 1d unet (latent diff) (1).ipynb` may import `google.colab.drive`. For local runs:
+`latent_diffusion_mlp.ipynb` may import `google.colab.drive`. For local runs:
 
 ```python
 try:
@@ -102,7 +102,6 @@ python -c "import numpy, pandas, torch, torchvision, tensorflow, sklearn, matplo
 
 ## Known gaps
 
-- [ ] Pin torch and tensorflow after environment check
-- [ ] Guard or remove Colab mount in latent-diff notebook
-- [ ] Optional: dedupe VAE training between `vae.ipynb` and latent-diff notebook
-- [ ] Optional: rename latent-diff notebook to accurate filename (breaking change for links)
+- [x] Pin torch and tensorflow in `requirements.txt` (Python 3.13.5)
+- [ ] Guard or remove Colab mount in `latent_diffusion_mlp.ipynb`
+- [ ] Optional: dedupe VAE training between `vae.ipynb` and `latent_diffusion_mlp.ipynb`

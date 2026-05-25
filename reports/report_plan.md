@@ -37,7 +37,7 @@ Deliverables: this outline now; `report.tex` and `report.pdf` later.
 | VAE | train/val loss 100.22 / 100.09 | `vae.ipynb` |
 | DDPM | avg loss 0.0454 (ep 15) | `ddpm.ipynb` |
 | DCGAN | G/D loss 3.41 / 0.32 | `dcgan.ipynb` |
-| Latent diffusion MLP | MSE 0.224 (ep 150) | `vae + 1d unet (latent diff) (1).ipynb` |
+| Latent diffusion MLP | MSE 0.224 (ep 150) | `latent_diffusion_mlp.ipynb` |
 
 ## Figure list
 
@@ -49,7 +49,7 @@ Deliverables: this outline now; `report.tex` and `report.pdf` later.
 6. **VAE reconstruction grid** — `vae.ipynb` output
 7. **DDPM sample progression** — `ddpm.ipynb` output
 8. **DCGAN generated digits** — `dcgan.ipynb` output
-9. **Latent diffusion samples** — latent-diff notebook output
+9. **Latent diffusion samples** — `latent_diffusion_mlp.ipynb` output
 
 ## Source files
 

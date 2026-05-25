@@ -22,7 +22,7 @@ setup → eda → knn → logistic → mlp → cnn → comparison → vae → dd
 | 8 | `model/vae` | Variational autoencoder | `vae.ipynb` | `vae.ipynb` | Loss 100.22/100.09; artifact paths | Parse notebook |
 | 9 | `model/ddpm` | Denoising diffusion | `ddpm.ipynb` | `ddpm.ipynb` | Loss 0.0454; checkpoints gitignored | Parse notebook |
 | 10 | `model/dcgan` | DCGAN | `dcgan.ipynb` | `dcgan.ipynb` | G/D 3.41/0.32 | Parse notebook |
-| 11 | `model/latent-diffusion` | Latent diffusion MLP | `vae + 1d unet (latent diff) (1).ipynb` | latent-diff notebook | MSE 0.224; Colab cell guarded | Parse notebook |
+| 11 | `model/latent-diffusion` | Latent diffusion MLP | `latent_diffusion_mlp.ipynb` | latent-diff notebook | MSE 0.224; Colab cell guarded | Parse notebook |
 | 12 | `docs/learning-roadmap` | Learning roadmap and README | `README.md`, `docs/*` | — | Both tracks documented; metrics cited | README links valid |
 | 13 | `docs/report-plan` | Report plan | `reports/report_plan.md` | — | Outline complete (~2000 words) | File exists |
 

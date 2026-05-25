@@ -100,13 +100,13 @@ figures:
 
   # Latent diffusion
   - dest: figures/10_latent_diff/vae_reconstructions.png
-    notebook: notebooks/vae + 1d unet (latent diff) (1).ipynb
+    notebook: notebooks/latent_diffusion_mlp.ipynb
     cell: 7
     output: 0
     role: VAE reconstructions in latent-diff notebook
 
   - dest: figures/10_latent_diff/diffusion_samples.png
-    notebook: notebooks/vae + 1d unet (latent diff) (1).ipynb
+    notebook: notebooks/latent_diffusion_mlp.ipynb
     cell: 16
     output: 1
     role: Latent diffusion generated digits

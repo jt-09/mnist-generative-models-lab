@@ -34,7 +34,7 @@
       "model": "Latent diffusion MLP",
       "metric": "mse_epoch_150",
       "value": 0.225,
-      "source": "notebooks/vae + 1d unet (latent diff) (1).ipynb"
+      "source": "notebooks/latent_diffusion_mlp.ipynb"
     }
   ]
 }
