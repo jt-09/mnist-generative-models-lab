@@ -1,0 +1,23 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.DS_Store
+
+# Model weights and training artifacts (regenerate via notebooks)
+training_results/
+latent_data/
+*.pth
+*.pkl
+ddpm_mnist*.pth
+
+# Large generated arrays
+*.npy
+
+# MNIST download caches (user machine)
+data/
+
+# IDE
+.cursor/
+*.swp

@@ -1,0 +1,10 @@
+numpy          # TODO: pin after environment check
+pandas         # TODO: pin after environment check
+seaborn        # TODO: pin after environment check
+matplotlib     # TODO: pin after environment check
+scikit-learn   # TODO: pin after environment check
+jupyter        # TODO: pin after environment check
+torch          # TODO: pin after environment check
+torchvision    # TODO: pin after environment check
+tensorflow     # TODO: pin after environment check
+tqdm           # TODO: pin after environment check
