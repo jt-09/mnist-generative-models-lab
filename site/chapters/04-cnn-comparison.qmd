@@ -1,0 +1,109 @@
+# CNN and model comparison
+
+After the manual MLP, I wanted a model that respects the fact that digits are images, not arbitrary 784-vectors. This chapter covers a small PyTorch CNN and the side-by-side comparison notebook that produced the best classification number in the lab.
+
+## SimpleCNN
+
+<p class="source-notebook">
+<strong>Source notebook:</strong> <a href="https://github.com/jt-09/mnist-generative-models-lab/blob/main/notebooks/cnn.ipynb">notebooks/cnn.ipynb</a>
+</p>
+
+::: {.callout-note}
+## Decision: why a CNN was the right next step after MLP
+
+The MLP can learn non-linear features, but every hidden unit still looks at a flattened vector. A CNN shares filters across spatial locations, so the same edge detector can fire in many places. On images, that inductive bias is the natural next experiment after “one hidden layer works.”
+:::
+
+`SimpleCNN` is intentionally small: `Conv2d(1,16)` → `Conv2d(16,32)` → `MaxPool` → `Linear(32*14*14, 128)` → `Linear(128, 10)`. I trained it for five epochs with SGD and momentum. Test accuracy reached **0.9871** by epoch 4.
+
+The post-training analysis panel combines confusion, ROC-style views, and related diagnostics. Read it as a story about remaining errors, not only as a single accuracy number.
+
+::: {.fig-wide}
+![CNN post-training analysis panel with confusion matrix and related metrics](../assets/ext/figures/05_cnn/confusion_matrix.png){fig-alt="Multi-panel CNN evaluation figure including confusion matrix and classification diagnostics for the SimpleCNN model."}
+:::
+
+<p class="fig-followup">
+Most mass sits on the diagonal, which matches **0.9871** accuracy. The off-diagonal cells are the interesting part: they show which digit pairs still collide after convolution. Those pairs usually look like handwriting near-misses rather than total model failure.
+</p>
+
+First-layer convolution filters make the inductive-bias argument visual:
+
+::: {.fig-standard}
+![First convolutional layer filters from SimpleCNN](../assets/ext/figures/05_cnn/conv_filters.png){fig-alt="Grid of learned first-layer convolution filters showing edge-like and stroke-like patterns."}
+:::
+
+<p class="fig-followup">
+The filters are small and imperfect, but many look like oriented edges or stroke fragments. That is what I wanted to see: local pattern detectors reused across the image, instead of a separate weight for every pixel location.
+</p>
+
+::: {.hrt-block}
+**Hypothesis:** Adding convolution and pooling should beat the manual MLP by exploiting spatial structure, though the absolute gain on MNIST might be modest.
+
+**Result:** SimpleCNN reached **0.9871** test accuracy, above the manual MLP at **0.9794**.
+
+**Interpretation:** The MLP already had non-linear capacity. What it lacked was an inductive bias that matches images. Convolution reuses the same local filter everywhere, so the model does not have to relearn “vertical stroke” at every position. Pooling adds a bit of local invariance to small shifts. On MNIST those advantages are real but not dramatic in absolute accuracy, the dataset is already friendly to dense models, but the filter visualizations and confusion structure make the bias feel concrete. I also learned to read the confusion matrix as remaining error modes: once accuracy is high, the interesting signal is which pairs still confuse the network.
+
+**Takeaway:** On a simple image task, CNN gains can look small in the third decimal place while still teaching the right architectural lesson.
+:::
+
+## Side-by-side comparison
+
+<p class="source-notebook">
+<strong>Source notebook:</strong> <a href="https://github.com/jt-09/mnist-generative-models-lab/blob/main/notebooks/02_mnist_models.ipynb">notebooks/02_mnist_models.ipynb</a>
+</p>
+
+`02_mnist_models.ipynb` benchmarks DummyClassifier, logistic regression, SGD, KNN, PCA+LR, a PyTorch MLP, and a PyTorch CNN on a shared harness. The comparison CNN reaches **0.9913**.
+
+The accuracy ladder:
+
+::: {.fig-standard}
+![Bar chart comparing classification accuracies across models](../assets/ext/figures/06_comparison/results_bar_chart.png){fig-alt="Bar chart of model test accuracies from a dummy baseline up through KNN, MLP, and CNN."}
+:::
+
+<p class="fig-followup">
+Deep learning wins, but classical KNN is already strong. The chart is also a reminder that “more neural” is not the only axis that matters: the dummy baseline and linear models set the floor, and the jump from linear to non-linear is larger than the jump from MLP to CNN on this dataset.
+</p>
+
+Top CNN confusion pairs with example images:
+
+::: {.fig-wide}
+![Examples of the top CNN confusion pairs](../assets/ext/figures/06_comparison/cnn_confusion_pairs.png){fig-alt="Grid of example MNIST digits illustrating the most common CNN confusion pairs between digit classes."}
+:::
+
+<p class="fig-followup">
+These pairs are where the model still hesitates. Looking at the pixels makes the remaining errors feel like handwriting variation, not mysterious numerical noise.
+</p>
+
+::: {.callout-warning}
+## Notebook hygiene note
+
+The comparison notebook may contain duplicate CNN rows from re-runs. I cite **0.9913** as the comparison CNN result. The exported table in `results/tables/model_comparison.md` shows more than one CNN entry for that reason.
+:::
+
+::: {.hrt-block}
+**Hypothesis:** A shared evaluation harness would show a clean ladder from classic ML to CNN, with CNN clearly ahead and remaining errors concentrated in a few digit pairs.
+
+**Result:** Comparison CNN test accuracy **0.9913**; the bar chart and confusion-pair panel match that ladder, with duplicate CNN rows as a bookkeeping caveat.
+
+**Interpretation:** Putting models on the same preprocessing and split removes a common source of fake comparisons. Once that is fixed, the story is consistent with the earlier chapters: linear models plateau, neighbor and MLP methods jump, and convolution adds another increment. The absolute gap from manual MLP (**0.9794**) to comparison CNN (**0.9913**) is real but modest on MNIST. That does not make the CNN pointless, it makes the dataset’s ceiling visible. The confusion pairs then become the right next question: not “is accuracy high?” but “which visual near-misses remain?”
+
+**Takeaway:** Benchmarking is as much about honest comparison and error analysis as it is about the top number.
+:::
+
+## Full classification results
+
+Metrics from saved notebook outputs:
+
+| Model | Test accuracy | Source |
+|-------|---------------|--------|
+| KNN (GPU, k=3) | 0.9705 | `manual_knn.ipynb` |
+| Logistic regression | 0.9241 | `manual_logistic_reg.ipynb` |
+| Manual MLP | 0.9794 | `manual_mlp.ipynb` |
+| SimpleCNN | 0.9871 | `cnn.ipynb` |
+| Comparison CNN | **0.9913** | `02_mnist_models.ipynb` |
+
+Learning ladder:
+
+```
+KNN 0.9705 → Logistic 0.9241 → MLP 0.9794 → CNN 0.9871 → Comparison CNN 0.9913
+```
