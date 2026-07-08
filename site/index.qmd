@@ -1,0 +1,91 @@
+---
+title: "MNIST Generative Models Lab"
+---
+
+::: {.hero}
+# MNIST Generative Models Lab
+
+<p class="hero-pitch">
+I built this as a hands-on curriculum from scratch classifiers through CNN comparison to VAE, DDPM, DCGAN, and latent diffusion, not a single benchmark script.
+</p>
+
+<div class="hero-actions">
+<a class="btn btn-primary-cta" href="chapters/01-why.html">Read the case study</a>
+<a class="btn btn-secondary-cta" href="https://github.com/jt-09/mnist-generative-models-lab">View GitHub repo</a>
+<a class="btn btn-secondary-cta" href="assets/ext/report.pdf">Open technical report</a>
+</div>
+
+<p class="hero-summary">
+Built an end-to-end MNIST ML lab from scratch KNN, logistic regression, and MLP through CNN classification (99%+ accuracy) to generative models including VAE, DDPM, DCGAN, and latent diffusion, documented as an interactive Jupyter learning path with a reflective technical report.
+</p>
+:::
+
+## Key results
+
+::: {.metric-grid}
+::: {.metric-card}
+<span class="metric-value">99.13%</span>
+<span class="metric-label">Best classifier<br/>(comparison CNN)</span>
+:::
+::: {.metric-card}
+<span class="metric-value">97.94%</span>
+<span class="metric-label">Manual MLP<br/>(from scratch)</span>
+:::
+::: {.metric-card}
+<span class="metric-value">97.05%</span>
+<span class="metric-label">KNN baseline<br/>(GPU, k=3)</span>
+:::
+::: {.metric-card}
+<span class="metric-value metric-text">VAE · DDPM<br/>DCGAN · Latent diffusion</span>
+<span class="metric-label">Generative models</span>
+:::
+:::
+
+## What this project demonstrates
+
+::: {.landing-section}
+- From-scratch ML implementation
+- PyTorch CNN training and evaluation
+- Model comparison and error analysis
+- Generative modeling tradeoffs
+- Technical writing and reproducibility
+:::
+
+## Skills demonstrated
+
+::: {.landing-section}
+- NumPy implementation of KNN, softmax regression, and MLP training loops
+- PyTorch model training, evaluation, and visualization
+- CNN architecture design and confusion analysis
+- Generative modeling with VAE, DDPM, DCGAN, and latent diffusion
+- Experiment documentation, artifact hygiene, and reproducibility
+:::
+
+## Best for readers who want…
+
+::: {.landing-section}
+<ul class="quick-links">
+<li><a href="chapters/04-cnn-comparison.html">Classification results</a></li>
+<li><a href="chapters/05-generative-models.html">Generative models</a></li>
+<li><a href="chapters/06-what-i-learned.html">What I learned</a></li>
+<li><a href="chapters/08-reproducibility.html">How to reproduce</a></li>
+</ul>
+:::
+
+## Learning path
+
+I followed a fixed order: understand the data, implement classical models by hand, add a CNN, benchmark everything side by side, then explore four generative families.
+
+::: {.fig-wide}
+![Learning path from EDA through manual classifiers, CNN comparison, and generative models](assets/ext/figures/00_roadmap/learning_path.png){fig-alt="Flowchart of the project learning path: EDA, KNN, logistic regression, MLP, CNN, model comparison, VAE, DDPM, DCGAN, and latent diffusion."}
+:::
+
+<p class="fig-followup">
+The left half of the path is classification. The right half is generation. I kept saved notebook outputs so you can read metrics and plots without retraining.
+</p>
+
+## More links
+
+- [Results index](assets/ext/RESULTS_INDEX.md) ,  collated figures and metrics
+- [Report (Markdown)](assets/ext/report.md)
+- [Notebooks on GitHub](https://github.com/jt-09/mnist-generative-models-lab/tree/main/notebooks)
