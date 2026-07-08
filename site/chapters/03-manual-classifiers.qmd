@@ -1,0 +1,109 @@
+# Manual classifiers: KNN, logistic regression, MLP
+
+I expected accuracy to climb as models gained structure. That mostly happened, but not monotonically. This chapter covers the three from-scratch classifiers that made the capacity lesson concrete.
+
+## KNN and the bias-variance tradeoff
+
+<p class="source-notebook">
+<strong>Source notebook:</strong> <a href="https://github.com/jt-09/mnist-generative-models-lab/blob/main/notebooks/manual_knn.ipynb">notebooks/manual_knn.ipynb</a>
+</p>
+
+::: {.callout-note}
+## Decision: why KNN was a useful baseline despite being simple
+
+KNN barely “trains.” It stores the training set and classifies by nearest neighbors. That makes it a strong sanity check: if a learned model cannot beat a well-tuned KNN on MNIST, the learned model’s hypothesis class, or my implementation, is the problem. The k-sweep also makes bias-variance visible without a long training loop.
+:::
+
+I implemented KNN in NumPy first, then batched it on GPU with `torch.cdist` and `topk`. A sweep over $k \in \{1, 3, 5, 9, 15, 20\}$ shows accuracy peaking near **k=3** at **0.9705** on the full test set.
+
+Look for the peak and the drop-off as $k$ grows: small $k$ is noisier; large $k$ oversmooths.
+
+::: {.fig-standard}
+![KNN test accuracy versus k, peaking near k=3](../assets/ext/figures/02_knn/k_sweep.png){fig-alt="Line plot of KNN test accuracy across k values 1, 3, 5, 9, 15, and 20, with a peak near k equals 3."}
+:::
+
+<p class="fig-followup">
+The horizontal axis is $k$; the vertical axis is test accuracy. The curve peaks at **0.9705** for $k=3$. Very small $k$ fits local quirks; very large $k$ averages across neighbors that may belong to other digit classes. Even on MNIST, KNN is a strong baseline if you can afford the distance computation.
+</p>
+
+::: {.hrt-block}
+**Hypothesis:** A non-parametric neighbor vote would be a decent but not exceptional baseline, and larger $k$ would steadily improve accuracy by reducing noise.
+
+**Result:** GPU KNN peaked at **0.9705** with **k=3**; larger $k$ values did not keep climbing.
+
+**Interpretation:** KNN does not learn a compact set of weights. It compares a test image to stored training images in pixel space and votes among the nearest ones. That is powerful when similar-looking digits share labels, which is often true for MNIST. The bias-variance tradeoff shows up directly in $k$: $k=1$ can latch onto a single atypical neighbor, while large $k$ pulls in digits that are only loosely similar in Euclidean distance. The peak at $k=3$ is the sweet spot on this run, enough smoothing to ignore one-off neighbors, not so much that decision boundaries blur across classes. The high absolute accuracy also set a bar that later linear models had to clear.
+
+**Takeaway:** A simple baseline with a clear geometric story can outperform a more “mathematical” parametric model if that model’s capacity is too low.
+:::
+
+## Logistic regression: a dip I did not expect
+
+<p class="source-notebook">
+<strong>Source notebook:</strong> <a href="https://github.com/jt-09/mnist-generative-models-lab/blob/main/notebooks/manual_logistic_reg.ipynb">notebooks/manual_logistic_reg.ipynb</a>
+</p>
+
+::: {.callout-note}
+## Decision: why underperforming KNN was expected after PCA overlap
+
+After EDA, class overlap in the first two principal components already suggested that a linear boundary in flattened pixel space would struggle. Softmax regression is exactly that kind of model: one linear score per class, no hidden features. When it landed at **0.9241**, I treated the gap to KNN as a capacity lesson, not as proof that my gradient was wrong.
+:::
+
+I implemented softmax regression by hand: `one_hot`, `softmax`, and explicit updates from `dZ = (P - Y_batch) / batch_size`. I expected accuracy to improve over a simple baseline because the model learns class-specific weights. It reached **0.9241**, below KNN and well below the manual MLP.
+
+The misclassified grid shows the kinds of errors a linear model leaves behind:
+
+::: {.fig-standard}
+![Grid of digits misclassified by logistic regression](../assets/ext/figures/03_logistic/misclassified_grid.png){fig-alt="Grid of MNIST digit images that logistic regression misclassified, showing ambiguous or atypical handwriting."}
+:::
+
+<p class="fig-followup">
+These are not random failures. Many look like handwriting styles that sit near another class in pixel space, tilted strokes, open loops, thin sevens that resemble ones. That matches a linear decision surface running out of flexibility.
+</p>
+
+::: {.hrt-block}
+**Hypothesis:** Accuracy should improve over a simple baseline because the model learns class-specific weights.
+
+**Result:** It reached **0.9241**, below KNN (**0.9705**).
+
+**Interpretation:** Softmax regression fits one linear decision surface per class in flattened pixel space. After EDA, that was already a warning: the first two principal components showed substantial class overlap, which means digits that look different to a human can still sit close together when each image is treated as a 784-vector. A linear model can only carve that space with hyperplanes. It has no hidden layer to invent stroke detectors, and it cannot adapt locally the way KNN does by looking at neighbors. So even with a correct gradient implementation, the hypothesis space is too small for the handwriting variation in MNIST. The misclassified grid matches that story, confusions look like style and stroke overlap, not random label noise.
+
+**Takeaway:** Model capacity and inductive bias matter more than how carefully I implement the update rule.
+:::
+
+## Manual MLP: non-linear features by hand
+
+<p class="source-notebook">
+<strong>Source notebook:</strong> <a href="https://github.com/jt-09/mnist-generative-models-lab/blob/main/notebooks/manual_mlp.ipynb">notebooks/manual_mlp.ipynb</a>
+</p>
+
+Adding one ReLU hidden layer (`H=128`, `lr=0.1`, `epochs=100`, `batch_size=256`) raised accuracy to **0.9794**. The diagnostic panel includes loss curves, a confusion matrix, misclassified examples, and first-layer weight templates.
+
+Look especially at the weight templates: each column of $W_1$ reshaped to 28×28 looks like a crude stroke detector.
+
+::: {.fig-wide}
+![Manual MLP diagnostics including loss curves, confusion matrix, and first-layer weight templates](../assets/ext/figures/04_mlp/weight_templates.png){fig-alt="Multi-panel figure showing MLP training curves, confusion matrix, misclassified digits, and first-layer weight templates reshaped as 28 by 28 images."}
+:::
+
+<p class="fig-followup">
+The weight templates are noisy, but many emphasize edges and loops rather than uniform pixel blobs. That is the point of the hidden layer: the model is no longer limited to a single linear map from raw pixels to class scores. It can build intermediate features, then classify from those. Accuracy jumping from **0.9241** to **0.9794** is the quantitative version of that story.
+</p>
+
+::: {.hrt-block}
+**Hypothesis:** One ReLU hidden layer should recover most of the gap to KNN by learning non-linear features from pixels.
+
+**Result:** Test accuracy reached **0.9794**, above KNN (**0.9705**) and well above logistic regression (**0.9241**).
+
+**Interpretation:** The architecture is still small, one hidden layer with 128 units, but the ReLU nonlinearity changes the hypothesis class. Instead of scoring each class as a weighted sum of raw pixels, the network can combine pixels into intermediate activations that respond to local stroke patterns. The first-layer templates make that concrete: they look like imperfect edge and blob detectors rather than class means alone. Once those features exist, the final softmax layer is classifying in a more useful representation. That is why the accuracy ladder finally moves the way I originally expected: not because the optimizer became magical, but because the model could represent the decision boundaries MNIST needs.
+
+**Takeaway:** A single hidden layer is enough, on this dataset, to turn “implement the math” into “learn features,” and the weight visualizations help verify that story.
+:::
+
+## Classification metrics so far
+
+| Model | Test accuracy | Source notebook |
+|-------|---------------|-----------------|
+| KNN (GPU, k=3) | 0.9705 | `manual_knn.ipynb` |
+| Logistic regression | 0.9241 | `manual_logistic_reg.ipynb` |
+| Manual MLP | 0.9794 | `manual_mlp.ipynb` |
+
+The next chapter adds spatial structure with a CNN and puts classic ML and deep learning on the same comparison harness.

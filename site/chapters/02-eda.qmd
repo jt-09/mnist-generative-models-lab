@@ -1,0 +1,59 @@
+# EDA: understanding the data before modeling
+
+<p class="source-notebook">
+<strong>Source notebook:</strong> <a href="https://github.com/jt-09/mnist-generative-models-lab/blob/main/notebooks/eda_analysis.ipynb">notebooks/eda_analysis.ipynb</a>
+</p>
+
+::: {.callout-note}
+## Decision: why I started with EDA before modeling
+
+I wanted to know what kind of problem the pixels were giving me before I chose a model class. Class balance tells me whether raw accuracy is fair. Mean digit templates show centering and stroke thickness. PCA overlap foreshadows whether a linear boundary in pixel space is even plausible. Skipping that step would have made the later logistic-regression dip look like a bug instead of a capacity lesson.
+:::
+
+Before training anything, I loaded MNIST and walked through shapes, class balance, per-digit galleries, mean templates, pixel variance, intensity histograms, and PCA structure. The dataset is the usual split: **60,000** train and **10,000** test images, each **28×28** grayscale, across **10** digit classes.
+
+## Class balance
+
+On visual inspection, the class counts are nearly even. That matters: raw accuracy is a reasonable headline metric here, and I did not need heavy rebalancing tricks for this dataset.
+
+::: {.fig-standard}
+![Bar chart of MNIST class counts showing near-even balance across digits 0-9](../assets/ext/figures/01_eda/class_balance.png){fig-alt="Bar chart of sample counts per digit class 0 through 9, showing roughly equal class sizes."}
+:::
+
+<p class="fig-followup">
+The bars sit close to each other. If one digit had been rare, I would have treated accuracy more carefully and looked harder at per-class metrics from the start. Here, a single accuracy number is a fair first summary.
+</p>
+
+## Mean digit templates
+
+Averaging images within each class produces the familiar “prototype” digits. They look like the digits I expect, but they also show that stroke thickness and centering vary enough that a single template is only a rough summary.
+
+::: {.fig-standard}
+![Mean image template for each MNIST digit class](../assets/ext/figures/01_eda/mean_digits.png){fig-alt="Grid of ten mean digit images, one per class, showing averaged stroke shapes for digits 0 through 9."}
+:::
+
+<p class="fig-followup">
+The means are readable, which is reassuring, but they also hide the within-class variation that later confuses linear models, tilted sevens, open versus closed fours, and thin versus thick strokes.
+</p>
+
+## PCA overlap
+
+The plot that stuck with me was the PCA projection. In the first two components, classes overlap substantially:
+
+::: {.fig-standard}
+![PCA projection of MNIST showing overlapping digit classes in the first two components](../assets/ext/figures/01_eda/pca_overlap.png){fig-alt="Scatter plot of MNIST samples in the first two principal components, with digit classes overlapping rather than forming clean clusters."}
+:::
+
+<p class="fig-followup">
+The axes are the first two principal components of flattened pixel space. Points are colored by digit label. Clean blobs would have suggested that a simple linear separator might be enough. Instead, the clouds interleave. MNIST is often called “easy,” yet a single linear boundary in pixel space still cannot separate all ten digits cleanly. I took that as early evidence that I would need non-linear models, which is exactly what the later notebooks tested.
+</p>
+
+::: {.hrt-block}
+**Hypothesis:** A quick look at MNIST would confirm it is a clean, nearly linearly separable toy problem.
+
+**Result:** Class balance is healthy, mean templates are readable, but PCA shows clear class overlap in the first two components.
+
+**Interpretation:** Even though digits are centered and low-resolution, handwriting style still spreads each class across a region of pixel space. Two principal components are a coarse view, but the overlap is enough to warn that a model limited to linear decision surfaces will leave systematic errors. That foreshadowing mattered later: when logistic regression landed below KNN, I already had a geometric reason to trust the result instead of debugging the gradient for hours.
+
+**Takeaway:** EDA is not decoration. It sets expectations for which model classes can succeed and which failures are informative.
+:::
