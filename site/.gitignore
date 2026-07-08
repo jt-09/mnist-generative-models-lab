@@ -1,0 +1,6 @@
+_book/
+.quarto/
+assets/ext/
+
+/.quarto/
+**/*.quarto_ipynb
