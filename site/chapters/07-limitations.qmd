@@ -1,0 +1,47 @@
+# Limitations and future work
+
+This chapter is the engineering honesty section. The lab taught me a lot; it is also incomplete in ways that matter if someone wants to extend it.
+
+## Limitations
+
+### No FID or Inception Score
+
+I judged generative samples by eye on PNG grids. That is enough for a learning walkthrough. It is not enough to claim ranked generative quality. Any statement on this site about VAE blur, DCGAN sharpness, or diffusion sample readability is qualitative.
+
+### MNIST only, 28×28 grayscale
+
+Digits are a teaching dataset. Results here do not transfer automatically to natural images, color, or higher resolution. I used MNIST because mistakes are visible and iteration is fast, not because it represents real-world vision.
+
+### Duplicate VAE training
+
+Both `vae.ipynb` and `latent_diffusion_mlp.ipynb` train a VAE. That was convenient while I was learning the pipeline. It is poor artifact hygiene for a real project. The latent-diffusion notebook should load a checkpoint instead of retraining.
+
+### Comparison notebook hygiene
+
+`02_mnist_models.ipynb` may contain duplicate CNN rows from re-runs. I cite **0.9913** as the comparison CNN accuracy. The exported comparison table preserves more than one CNN entry.
+
+### Gitignored training artifacts
+
+Checkpoints and large arrays live outside git on purpose:
+
+| Path | Contents |
+|------|----------|
+| `training_results/` | VAE weights, local plots, pickles |
+| `latent_data/` | Extracted latent arrays |
+| `*.pth` / `ddpm_mnist*.pth` | Model checkpoints |
+
+Metrics and figures in `results/` are the portable record. Full retraining is optional.
+
+## Future work
+
+- Deduplicate the VAE pipeline: train once, load `vae_model.pth` in the latent-diffusion notebook.
+- Add FID or classifier-based generative scores so sample quality claims can be quantitative.
+- Guard or remove Colab-only cells for cleaner local runs.
+- Extend the same notebook structure to Fashion-MNIST.
+- Optional `nbconvert` CI smoke test to catch broken imports without full training.
+
+::: {.callout-warning}
+## What I am not claiming
+
+I am not claiming a new MNIST record, a production vision system, or a generative model ranked by FID/IS. I am claiming a reproducible learning path with saved outputs, honest metrics, and documented rough edges.
+:::

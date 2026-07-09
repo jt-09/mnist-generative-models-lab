@@ -1,0 +1,45 @@
+# What I learned
+
+Looking back at the full lab, a few lessons stand out. These are the judgment calls I would want a reader to remember more than any single accuracy number.
+
+::: {.callout-note}
+## Start with the data
+
+EDA took time, but it explained later failures. Class balance told me raw accuracy was fair. Mean templates showed stroke variation. PCA overlap foreshadowed why a linear softmax would struggle. When logistic regression landed below KNN, I already had a geometric reason to trust the result.
+:::
+
+::: {.callout-note}
+## Implement before abstracting
+
+Manual KNN, logistic regression, and MLP code made later PyTorch models easier to reason about. Once I had written `softmax` and a weight update by hand, a `nn.Linear` layer felt like a convenience, not a mystery. The same was true for distance computations before `torch.cdist`.
+:::
+
+::: {.callout-note}
+## Accuracy ladders lie a little
+
+I expected monotonic improvement. Logistic regression at **0.9241** broke that expectation. The ladder
+
+```
+KNN 0.9705 → Logistic 0.9241 → MLP 0.9794 → CNN 0.9871 → Comparison CNN 0.9913
+```
+
+is still useful, but only if I read the dip as a capacity lesson. Model class matters as much as tuning.
+:::
+
+::: {.callout-note}
+## Generative models teach different skills
+
+VAEs taught compression and ELBO tradeoffs. DDPMs taught noise schedules and why latent diffusion exists. GANs taught unstable co-training and sharpness. Latent diffusion tied the threads together: compress first, diffuse second, inherit the bottleneck. None of that required claiming state-of-the-art sample quality.
+:::
+
+::: {.callout-note}
+## Document the rough edges
+
+Duplicate VAE training, possible duplicate CNN rows in the comparison notebook, and missing FID scores are part of the honest story of how I built this repo. Hiding them would make the project look cleaner and teach less.
+:::
+
+::: {.callout-tip}
+## Reader takeaway
+
+The classification track shows that inductive bias and capacity explain the accuracy ladder better than “deeper is always better.” The generative track shows that blur, compute cost, and training stability trade off, and that qualitative PNG review is what I can defend without FID or IS.
+:::

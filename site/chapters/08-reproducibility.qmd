@@ -1,0 +1,83 @@
+# Reproducibility
+
+Practical notes for running the lab and reading the artifacts. Narrative is lighter here on purpose.
+
+## How to run
+
+```bash
+cd mnist-generative-models-lab
+python -m venv venv
+# Windows: venv\Scripts\activate
+# macOS/Linux: source venv/bin/activate
+pip install -r requirements.txt
+jupyter notebook notebooks/
+```
+
+Tested on **Python 3.13.5**. Package versions are pinned in [`requirements.txt`](https://github.com/jt-09/mnist-generative-models-lab/blob/main/requirements.txt).
+
+::: {.callout-warning}
+## Working directory
+
+Run notebooks with the **repository root** as the working directory so paths like `./training_results/` and `./latent_data/` resolve correctly.
+:::
+
+## Notebook order
+
+| Step | Notebook | Track |
+|------|----------|-------|
+| 1 | [`eda_analysis.ipynb`](https://github.com/jt-09/mnist-generative-models-lab/blob/main/notebooks/eda_analysis.ipynb) | EDA |
+| 2 | [`manual_knn.ipynb`](https://github.com/jt-09/mnist-generative-models-lab/blob/main/notebooks/manual_knn.ipynb) | Classification |
+| 3 | [`manual_logistic_reg.ipynb`](https://github.com/jt-09/mnist-generative-models-lab/blob/main/notebooks/manual_logistic_reg.ipynb) | Classification |
+| 4 | [`manual_mlp.ipynb`](https://github.com/jt-09/mnist-generative-models-lab/blob/main/notebooks/manual_mlp.ipynb) | Classification |
+| 5 | [`cnn.ipynb`](https://github.com/jt-09/mnist-generative-models-lab/blob/main/notebooks/cnn.ipynb) | Classification |
+| 6 | [`02_mnist_models.ipynb`](https://github.com/jt-09/mnist-generative-models-lab/blob/main/notebooks/02_mnist_models.ipynb) | Comparison |
+| 7 | [`vae.ipynb`](https://github.com/jt-09/mnist-generative-models-lab/blob/main/notebooks/vae.ipynb) | Generative |
+| 8 | [`ddpm.ipynb`](https://github.com/jt-09/mnist-generative-models-lab/blob/main/notebooks/ddpm.ipynb) | Generative |
+| 9 | [`dcgan.ipynb`](https://github.com/jt-09/mnist-generative-models-lab/blob/main/notebooks/dcgan.ipynb) | Generative |
+| 10 | [`latent_diffusion_mlp.ipynb`](https://github.com/jt-09/mnist-generative-models-lab/blob/main/notebooks/latent_diffusion_mlp.ipynb) | Generative |
+
+## Artifact policy
+
+Training outputs are **gitignored** and regenerated locally:
+
+| Path | Created by | Contents |
+|------|------------|----------|
+| `training_results/` | `vae.ipynb`, `latent_diffusion_mlp.ipynb` | `vae_model.pth`, plots, pickles |
+| `latent_data/` | `latent_diffusion_mlp.ipynb` | latent `.npy` arrays, labels |
+| `ddpm_mnist*.pth` | `ddpm.ipynb` | DDPM checkpoints |
+
+Metrics on this site come from **saved notebook runs**. Full retraining is optional. Do not commit checkpoints or large arrays.
+
+## Canonical metrics
+
+### Classification
+
+| Model | Test accuracy |
+|-------|---------------|
+| KNN (GPU, k=3) | 0.9705 |
+| Logistic regression | 0.9241 |
+| Manual MLP | 0.9794 |
+| SimpleCNN | 0.9871 |
+| Comparison CNN | 0.9913 |
+
+### Generative
+
+| Model | Metric | Value |
+|-------|--------|-------|
+| VAE (16-D) | Train / val loss | 100.22 / 100.09 |
+| DDPM (T=300) | Avg loss (epoch 15) | 0.0454 |
+| DCGAN | G / D loss | 3.41 / 0.32 |
+| Latent diffusion MLP | MSE (epoch 150) | 0.224 |
+
+Latent diffusion: I cite **0.224** to match the notebook write-up and README; `results/metrics/generative.json` rounds to **0.225**.
+
+## Source documents
+
+- [Technical report (PDF)](../assets/ext/report.pdf)
+- [Technical report (Markdown)](../assets/ext/report.md)
+- [Results index](../assets/ext/RESULTS_INDEX.md)
+- [GitHub repository](https://github.com/jt-09/mnist-generative-models-lab)
+
+## Dependency note
+
+TensorFlow and PyTorch are both required for the full notebook set. See [`docs/dependency_integrity.md`](https://github.com/jt-09/mnist-generative-models-lab/blob/main/docs/dependency_integrity.md) in the repo.
