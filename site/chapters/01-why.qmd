@@ -1,0 +1,40 @@
+# Why I built this
+
+I chose MNIST [@lecun1998gradient] because it is the standard place to make model behaviour visible before scaling up. This repo is not a production system. It is a curriculum I can walk through in Jupyter: understand the data, implement classical models by hand, add a small CNN, benchmark everything side by side, then explore compression (VAE), denoising (DDPM), adversarial training (DCGAN), and finally diffusion in a 16-D latent space.
+
+The main thing I wanted from the lab was not a leaderboard score. I wanted to feel each step: write the distance function for KNN, implement the softmax gradient by hand, watch a CNN filter turn into an edge detector, then see how a VAE bottleneck softens images before a diffusion model tries to undo noise in a smaller space.
+
+## Why MNIST
+
+MNIST is small enough that I could iterate quickly on a laptop, and familiar enough that mistakes show up clearly. A wrong distance function, a broken softmax, or a collapsed GAN is easier to notice on digits than on a messy real-world dataset. I treated that as a feature: the goal was to learn the modeling ideas, not to claim a new vision result.
+
+## Why manual implementations first
+
+Before I reached for PyTorch modules, I wanted the math to be visible. The manual notebooks force that:
+
+- KNN makes the geometry of nearest neighbors explicit.
+- Softmax regression makes the gradient update explicit.
+- A one-hidden-layer MLP makes feature learning feel concrete through weight templates.
+
+That sequence made later framework code easier to reason about, because I already knew what the loss and the parameters were doing.
+
+## Why move from classification to generation
+
+Once the accuracy ladder was in place, I wanted a second track that asked a different question: not “which digit is this?” but “can I sample digits that look like the training set?” VAE, DDPM, DCGAN, and latent diffusion each answer that with a different tradeoff, blur, compute cost, training stability, and how much quality is inherited from a bottleneck.
+
+## Why saved notebook outputs matter
+
+Each notebook preserves embedded outputs so metrics and plots are inspectable without retraining. All figures in this site were copied from those outputs into `results/figures/`. I did not regenerate checkpoints from gitignored `training_results/` or `*.pth` files for this write-up.
+
+::: {.callout-tip}
+## Reader takeaway
+
+Read this site as a walkthrough of decisions and results, not as a claim that MNIST is solved. The interesting parts are the awkward outcomes, logistic regression underperforming KNN, soft VAE reconstructions, heavy pixel-space diffusion, and what those outcomes taught me about capacity, inductive bias, and evaluation honesty.
+:::
+
+## What you should expect from this site
+
+- Concrete numbers from saved runs (classification accuracies; generative training losses).
+- Qualitative judgment of generative samples from PNG grids, no FID or Inception Score.
+- First-person notes on what I expected, what happened, and what I would change next.
+- Links back to the source notebooks and the PDF technical report when you want the raw artifacts.

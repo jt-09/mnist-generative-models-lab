@@ -31,3 +31,8 @@ reports/*.out
 
 # Extraction scratch files
 scripts/inventory.txt
+
+# Quarto book build output
+site/_book/
+site/.quarto/
+site/assets/ext/

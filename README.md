@@ -8,6 +8,7 @@
 
 A notebook-driven learning lab on MNIST that progresses from scratch implementations (KNN, logistic regression, MLP) through EDA and CNN classification to generative models: VAE, pixel-space DDPM, DCGAN, and VAE + latent diffusion MLP. Ten interactive notebooks preserve embedded outputs so metrics and plots are visible without retraining.
 
+**Project site:** [https://jt-09.github.io/mnist-generative-models-lab/](https://jt-09.github.io/mnist-generative-models-lab/)  
 **Technical report:** [`reports/report.pdf`](reports/report.pdf) (PDF) | [`reports/report.md`](reports/report.md) (Markdown)  
 **Collated figures and metrics:** [`results/RESULTS_INDEX.md`](results/RESULTS_INDEX.md)
 
@@ -33,7 +34,7 @@ MNIST is the canonical entry point for machine learning. This repo treats it as 
 
 ## Dataset
 
-- **MNIST** — 60,000 train / 10,000 test, 28x28 grayscale, 10 digit classes
+- **MNIST** : 60,000 train / 10,000 test, 28x28 grayscale, 10 digit classes
 - Auto-downloaded via `tensorflow.keras.datasets.mnist` or `torchvision.datasets.MNIST`
 - No local image files committed
 
@@ -114,6 +115,7 @@ mnist-generative-models-lab/
 ├── README.md
 ├── requirements.txt
 ├── .gitignore
+├── .github/workflows/  # Quarto → GitHub Pages
 ├── notebooks/          # 10 Jupyter notebooks (saved outputs)
 ├── results/
 │   ├── RESULTS_INDEX.md
@@ -123,6 +125,7 @@ mnist-generative-models-lab/
 ├── scripts/
 │   ├── extract_notebook_results.py
 │   └── results_manifest.yaml
+├── site/               # Quarto book source (GitHub Pages)
 ├── docs/               # Learning path, models, results, workflow
 └── reports/
     ├── report.pdf      # Technical report (~2000 words)
@@ -210,6 +213,7 @@ VAE plus `LatentDiffusionMLP` in latent space. Trains VAE, extracts latents, run
 
 | Doc | Purpose |
 |-----|---------|
+| [Project site](https://jt-09.github.io/mnist-generative-models-lab/) | Quarto book / case study |
 | [`docs/learning_path.md`](docs/learning_path.md) | Ordered syllabus |
 | [`docs/models.md`](docs/models.md) | Per-notebook architecture notes |
 | [`docs/results.md`](docs/results.md) | Full metrics tables |
@@ -220,6 +224,7 @@ VAE plus `LatentDiffusionMLP` in latent space. Trains VAE, extracts latents, run
 | [`reports/report.md`](reports/report.md) | Technical report (Markdown) |
 | [`reports/compile_report.ps1`](reports/compile_report.ps1) | Rebuild PDF (`pdflatex` + `bibtex`) |
 | [`results/RESULTS_INDEX.md`](results/RESULTS_INDEX.md) | Collated figures and metrics from notebook outputs |
+| [`site/`](site/) | Quarto book source |
 
 ## Resume bullet
 

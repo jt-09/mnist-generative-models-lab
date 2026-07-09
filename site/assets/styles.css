@@ -1,0 +1,225 @@
+/* Hero */
+.hero {
+  margin: 0.5rem 0 2rem;
+  padding: 1.75rem 0 0.5rem;
+}
+
+.hero h1 {
+  font-size: clamp(1.75rem, 4vw, 2.4rem);
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+}
+
+.hero-pitch {
+  font-size: 1.15rem;
+  max-width: 42rem;
+  margin: 0.75rem 0 1.25rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.hero-actions .btn {
+  display: inline-block;
+  padding: 0.55rem 1.1rem;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border: 1px solid transparent;
+}
+
+.btn-primary-cta {
+  background: #2780e3;
+  color: #fff !important;
+}
+
+.btn-primary-cta:hover {
+  background: #1f6bbf;
+  color: #fff !important;
+}
+
+.btn-secondary-cta {
+  background: #fff;
+  color: #2780e3 !important;
+  border-color: #2780e3;
+}
+
+.btn-secondary-cta:hover {
+  background: #f0f6fc;
+  color: #1f6bbf !important;
+}
+
+.hero-summary {
+  font-size: 0.95rem;
+  color: #555;
+  max-width: 42rem;
+  margin-top: 0.25rem;
+}
+
+/* Metric cards */
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin: 1.5rem 0 2rem;
+}
+
+@media (max-width: 900px) {
+  .metric-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 520px) {
+  .metric-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.metric-card {
+  background: #f7f9fc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 1rem 1.1rem;
+  text-align: center;
+}
+
+.metric-card .metric-value {
+  display: block;
+  font-size: 1.55rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  line-height: 1.2;
+  margin-bottom: 0.35rem;
+}
+
+.metric-card .metric-label {
+  display: block;
+  font-size: 0.85rem;
+  color: #555;
+  line-height: 1.35;
+}
+
+.metric-card .metric-value.metric-text {
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+/* Landing sections */
+.landing-section {
+  margin: 2rem 0;
+}
+
+.landing-section h2 {
+  margin-bottom: 0.75rem;
+}
+
+.landing-section ul {
+  margin-bottom: 0;
+}
+
+.quick-links {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem 1.25rem;
+  list-style: none;
+  padding-left: 0;
+  margin: 0.5rem 0 0;
+}
+
+@media (max-width: 600px) {
+  .quick-links {
+    grid-template-columns: 1fr;
+  }
+}
+
+.quick-links li a {
+  font-weight: 600;
+}
+
+/* Hypothesis / Result / Interpretation / Takeaway */
+.hrt-block {
+  margin: 1.5rem 0 2rem;
+  padding: 1rem 1.15rem;
+  background: #f8fafc;
+  border-left: 4px solid #2780e3;
+  border-radius: 0 4px 4px 0;
+}
+
+.hrt-block p {
+  margin: 0.55rem 0;
+}
+
+.hrt-block p:first-child {
+  margin-top: 0;
+}
+
+.hrt-block p:last-child {
+  margin-bottom: 0;
+}
+
+.hrt-block strong {
+  color: #1a1a1a;
+}
+
+.hrt-block .hrt-interpretation {
+  margin: 0.85rem 0;
+}
+
+/* Source notebook line */
+.source-notebook {
+  font-size: 0.9rem;
+  color: #555;
+  margin: 0.25rem 0 1.25rem;
+}
+
+/* Figures */
+.figure img,
+main img {
+  max-width: 100%;
+  height: auto;
+}
+
+.fig-wide img {
+  width: 100%;
+  max-width: 100%;
+}
+
+.fig-standard {
+  max-width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.fig-standard img {
+  width: 100%;
+}
+
+.quarto-figure {
+  margin: 1.25rem 0 0.5rem;
+}
+
+.quarto-figure figcaption,
+.figure-caption {
+  font-size: 0.9rem;
+  color: #444;
+  margin-top: 0.4rem;
+}
+
+.fig-followup {
+  margin: 0.35rem 0 1.5rem;
+  color: #333;
+}
+
+/* Skills / demonstrates lists */
+.plain-list {
+  margin-top: 0.5rem;
+}

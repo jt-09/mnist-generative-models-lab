@@ -1,0 +1,40 @@
+project:
+  type: book
+  output-dir: _book
+  pre-render: scripts/sync_resources.py
+  resources:
+    - "assets/ext/**"
+
+book:
+  title: "MNIST Generative Models Lab"
+  subtitle: "From manual classifiers to VAE, DDPM, DCGAN, and latent diffusion"
+  author: "Jay Thakkar"
+  repo-url: https://github.com/jt-09/mnist-generative-models-lab
+  repo-branch: main
+  repo-subdir: site
+  repo-actions: [source, issue]
+  site-url: https://jt-09.github.io/mnist-generative-models-lab/
+  chapters:
+    - index.qmd
+    - chapters/01-why.qmd
+    - chapters/02-eda.qmd
+    - chapters/03-manual-classifiers.qmd
+    - chapters/04-cnn-comparison.qmd
+    - chapters/05-generative-models.qmd
+    - chapters/06-what-i-learned.qmd
+    - chapters/07-limitations.qmd
+    - chapters/08-reproducibility.qmd
+    - chapters/references.qmd
+
+format:
+  html:
+    theme: cosmo
+    css: assets/styles.css
+    toc: true
+    number-sections: false
+    code-fold: true
+    code-tools: false
+    link-external-newwindow: true
+    fig-align: center
+
+bibliography: references.bib
